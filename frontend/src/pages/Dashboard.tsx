@@ -4,6 +4,7 @@ import { KPICard } from '../components/Dashboard/KPICard'
 import { AirQualityChart } from '../components/Dashboard/AirQualityChart'
 import { VelibCard } from '../components/Dashboard/VelibCard'
 import { TrafficAlertsWidget } from '../components/Dashboard/TrafficAlertsWidget'
+import { AnomalyWidget } from '../components/Dashboard/AnomalyWidget'
 
 const getSeverity = (pm25: number) => {
   if (pm25 <= 12) return 'good'
@@ -64,6 +65,12 @@ export const Dashboard: React.FC = () => {
           <VelibCard />
           <TrafficAlertsWidget />
         </div>
+      </div>
+
+      {/* Anomaly Detection - Phase 2 Epic 3 */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800">Détection d'Anomalies</h2>
+        <AnomalyWidget />
       </div>
     </div>
   )

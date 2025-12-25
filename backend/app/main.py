@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
-from app.api.v1 import air_quality, weather, sensors, auth, mobility, predictions
+from app.api.v1 import air_quality, weather, sensors, auth, mobility, predictions, anomalies
 from app.config import get_settings
 
 settings = get_settings()
@@ -50,6 +50,7 @@ app.include_router(sensors.router)
 app.include_router(auth.router)
 app.include_router(mobility.router)
 app.include_router(predictions.router)
+app.include_router(anomalies.router)
 
 
 @app.get("/")
