@@ -1,0 +1,6 @@
+# Dependencies for data collection script
+# Used by GitHub Actions workflow
+
+supabase==2.3.4
+requests==2.31.0
+python-dotenv==1.0.0
