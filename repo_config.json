@@ -1,7 +1,0 @@
-{
-  "name": "smartcity-platform",
-  "description": "Real-time air quality and mobility monitoring platform - Phase 1 MVP",
-  "private": true,
-  "auto_init": false,
-  "gitignore_template": "Python"
-}
