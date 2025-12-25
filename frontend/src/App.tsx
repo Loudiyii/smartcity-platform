@@ -4,6 +4,7 @@ import { Dashboard } from './pages/Dashboard'
 import { DashboardMap } from './pages/DashboardMap'
 import { Predictions } from './pages/Predictions'
 import { Analytics } from './pages/Analytics'
+import { Reports } from './pages/Reports'
 import './App.css'
 
 function App() {
@@ -41,6 +42,12 @@ function App() {
                 >
                   Analyses
                 </Link>
+                <Link
+                  to="/reports"
+                  className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                >
+                  Rapports
+                </Link>
               </nav>
             </div>
           </div>
@@ -51,6 +58,7 @@ function App() {
             <Route path="/map" element={<DashboardMap />} />
             <Route path="/predictions" element={<Predictions />} />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/reports" element={<Reports />} />
           </Routes>
         </main>
       </div>

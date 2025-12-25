@@ -46,3 +46,7 @@ slowapi==0.1.9
 
 # Logging
 loguru==0.7.2
+
+# PDF Generation
+reportlab==4.0.8
+matplotlib==3.8.2
