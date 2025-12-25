@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { Dashboard } from './pages/Dashboard'
 import { DashboardMap } from './pages/DashboardMap'
+import { Predictions } from './pages/Predictions'
 import './App.css'
 
 function App() {
@@ -27,6 +28,12 @@ function App() {
                 >
                   Carte Interactive
                 </Link>
+                <Link
+                  to="/predictions"
+                  className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                >
+                  Prédictions
+                </Link>
               </nav>
             </div>
           </div>
@@ -35,6 +42,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/map" element={<DashboardMap />} />
+            <Route path="/predictions" element={<Predictions />} />
           </Routes>
         </main>
       </div>
