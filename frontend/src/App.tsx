@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { Dashboard } from './pages/Dashboard'
 import { DashboardMap } from './pages/DashboardMap'
 import { Predictions } from './pages/Predictions'
+import { Analytics } from './pages/Analytics'
 import './App.css'
 
 function App() {
@@ -34,6 +35,12 @@ function App() {
                 >
                   Prédictions
                 </Link>
+                <Link
+                  to="/analytics"
+                  className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                >
+                  Analyses
+                </Link>
               </nav>
             </div>
           </div>
@@ -43,6 +50,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/map" element={<DashboardMap />} />
             <Route path="/predictions" element={<Predictions />} />
+            <Route path="/analytics" element={<Analytics />} />
           </Routes>
         </main>
       </div>
