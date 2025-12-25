@@ -2,6 +2,8 @@ import React from 'react'
 import { useCurrentAirQuality, useAirQualityHistory } from '../hooks/useAirQuality'
 import { KPICard } from '../components/Dashboard/KPICard'
 import { AirQualityChart } from '../components/Dashboard/AirQualityChart'
+import { VelibCard } from '../components/Dashboard/VelibCard'
+import { TrafficAlertsWidget } from '../components/Dashboard/TrafficAlertsWidget'
 
 const getSeverity = (pm25: number) => {
   if (pm25 <= 12) return 'good'
@@ -48,12 +50,21 @@ export const Dashboard: React.FC = () => {
         />
       </div>
 
-      {/* Chart */}
+      {/* Air Quality Chart */}
       {!loadingHistory && history?.measurements && (
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-white p-6 rounded-lg shadow mb-8">
           <AirQualityChart data={history.measurements} />
         </div>
       )}
+
+      {/* IDFM Mobility Data - Phase 2 */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800">Mobilité Temps Réel (IDFM)</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <VelibCard />
+          <TrafficAlertsWidget />
+        </div>
+      </div>
     </div>
   )
 }
