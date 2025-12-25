@@ -177,7 +177,7 @@ export const Analytics: React.FC = () => {
           <li><strong>+1.0:</strong> Corrélation positive parfaite (les deux augmentent ensemble)</li>
           <li><strong>0.0:</strong> Aucune corrélation linéaire</li>
           <li><strong>-1.0:</strong> Corrélation négative parfaite (l'un augmente, l'autre diminue)</li>
-          <li className="mt-3"><strong>Seuils:</strong> |r| > 0.7 = forte, 0.4-0.7 = modérée, &lt; 0.4 = faible</li>
+          <li className="mt-3"><strong>Seuils:</strong> |r| {'>'} 0.7 = forte, 0.4-0.7 = modérée, {'<'} 0.4 = faible</li>
         </ul>
       </div>
     </div>

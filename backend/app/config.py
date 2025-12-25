@@ -4,6 +4,7 @@ Configuration management with Pydantic Settings
 
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+from supabase import create_client, Client
 
 
 class Settings(BaseSettings):
@@ -53,3 +54,14 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     """Get cached settings instance."""
     return Settings()
+
+
+def get_supabase_client() -> Client:
+    """
+    Get Supabase client instance.
+
+    Returns:
+        Supabase client configured with URL and key from settings
+    """
+    settings = get_settings()
+    return create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
