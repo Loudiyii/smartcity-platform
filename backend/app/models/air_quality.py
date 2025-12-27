@@ -34,7 +34,7 @@ class AirQualityCreate(AirQualityBase):
 
 class AirQualityResponse(AirQualityBase):
     """Air quality response model."""
-    id: int
+    id: str  # UUID from Supabase
     timestamp: datetime
     created_at: datetime
 

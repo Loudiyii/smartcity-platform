@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.13.0",
+    "@types/leaflet.heat": "^0.2.5",
     "axios": "^1.6.2",
     "chart.js": "^4.4.0",
     "date-fns": "^3.0.0",

@@ -8,10 +8,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
-from app.api.v1 import air_quality, weather, sensors, auth, mobility, predictions, anomalies, alerts, analytics, reports
+print("[MAIN] Importing routers...")
+from app.api.v1 import air_quality, weather, sensors, auth, mobility
+print("[MAIN] Core routers imported (air_quality, weather, sensors, auth, mobility)")
+
+from app.api.v1 import predictions, anomalies, alerts, analytics, reports, mobility_impact
+print("[MAIN] Phase 2 routers imported (predictions, anomalies, alerts, analytics, reports, mobility_impact)")
+
 from app.config import get_settings
 
 settings = get_settings()
+print(f"[MAIN] Settings loaded, environment: {settings.ENVIRONMENT}")
 
 
 @asynccontextmanager
@@ -54,6 +61,7 @@ app.include_router(anomalies.router)
 app.include_router(alerts.router)
 app.include_router(analytics.router)
 app.include_router(reports.router)
+app.include_router(mobility_impact.router)
 
 
 @app.get("/")

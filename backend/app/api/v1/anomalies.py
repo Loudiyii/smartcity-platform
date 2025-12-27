@@ -111,6 +111,9 @@ async def get_recent_anomalies(
         return anomalies
 
     except Exception as e:
+        import traceback
+        print(f"[ERROR] Failed to fetch recent anomalies: {str(e)}")
+        print(traceback.format_exc())
         raise HTTPException(
             status_code=500,
             detail=f"Failed to fetch recent anomalies: {str(e)}"

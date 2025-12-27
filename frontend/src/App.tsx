@@ -5,6 +5,10 @@ import { DashboardMap } from './pages/DashboardMap'
 import { Predictions } from './pages/Predictions'
 import { Analytics } from './pages/Analytics'
 import { Reports } from './pages/Reports'
+import MobilityImpact from './pages/MobilityImpact'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import ForgotPassword from './pages/ForgotPassword'
 import './App.css'
 
 function App() {
@@ -43,6 +47,12 @@ function App() {
                   Analyses
                 </Link>
                 <Link
+                  to="/mobility-impact"
+                  className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                >
+                  Impact Mobilité
+                </Link>
+                <Link
                   to="/reports"
                   className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
                 >
@@ -54,10 +64,17 @@ function App() {
         </header>
         <main>
           <Routes>
+            {/* Public routes (no auth required) */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+
+            {/* Protected routes (auth required) */}
             <Route path="/" element={<Dashboard />} />
             <Route path="/map" element={<DashboardMap />} />
             <Route path="/predictions" element={<Predictions />} />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/mobility-impact" element={<MobilityImpact />} />
             <Route path="/reports" element={<Reports />} />
           </Routes>
         </main>

@@ -23,8 +23,9 @@ export const IoTSensorsLayer: React.FC = () => {
   return (
     <>
       {sensors.map((sensor) => {
-        const lat = sensor.location?.lat
-        const lon = sensor.location?.lon
+        // API returns location.latitude and location.longitude
+        const lat = sensor.location?.lat || (sensor.location as any)?.latitude
+        const lon = sensor.location?.lon || (sensor.location as any)?.longitude
 
         if (!lat || !lon) return null
 

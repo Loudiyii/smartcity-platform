@@ -15,7 +15,10 @@ async def get_current_air_quality(city: str = Query(..., description="City name"
     supabase = get_supabase_client()
     service = SupabaseService(supabase)
 
-    data = await service.get_current_air_quality(city)
+    # Normalize city name to Title Case for consistent DB queries
+    city_normalized = city.capitalize()
+
+    data = await service.get_current_air_quality(city_normalized)
     if not data:
         raise HTTPException(status_code=404, detail=f"No data found for {city}")
 
@@ -31,7 +34,10 @@ async def get_air_quality_history(
     supabase = get_supabase_client()
     service = SupabaseService(supabase)
 
-    return await service.get_air_quality_history(city, limit)
+    # Normalize city name to Title Case for consistent DB queries
+    city_normalized = city.capitalize()
+
+    return await service.get_air_quality_history(city_normalized, limit)
 
 
 @router.post("/measurements", response_model=AirQualityResponse, status_code=201)

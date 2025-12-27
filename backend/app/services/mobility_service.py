@@ -38,7 +38,7 @@ class MobilityService:
             List of traffic disruption objects
         """
         if not self.api_key:
-            print("⚠️  IDFM_API_KEY not configured")
+            print("[WARNING] IDFM_API_KEY not configured")
             return []
 
         url = f"{self.base_url}/general-message"
@@ -47,7 +47,7 @@ class MobilityService:
         if severity:
             params['severity'] = severity
 
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(verify=False) as client:  # Disable SSL verification for Windows compatibility
             try:
                 response = await client.get(
                     url,
@@ -58,13 +58,21 @@ class MobilityService:
                 response.raise_for_status()
                 data = response.json()
 
-                disruptions = []
-
-                # Parse SIRI response structure
+                # Check for IDFM API errors
                 siri = data.get('Siri', {})
                 service_delivery = siri.get('ServiceDelivery', {})
                 message_delivery = service_delivery.get('GeneralMessageDelivery', [{}])[0]
+
+                # Check for error condition
+                error_condition = message_delivery.get('ErrorCondition')
+                if error_condition:
+                    error_info = error_condition.get('ErrorInformation', {})
+                    error_text = error_info.get('ErrorText', 'Unknown error')
+                    print(f"[WARNING] IDFM API error: {error_text}")
+                    return []
+
                 info_messages = message_delivery.get('InfoMessage', [])
+                disruptions = []
 
                 for item in info_messages:
                     disruption = self._parse_disruption(item)
@@ -75,10 +83,11 @@ class MobilityService:
                 return disruptions
 
             except httpx.HTTPError as e:
-                print(f"❌ Error fetching traffic disruptions: {e}")
+                print(f"[ERROR] Error fetching traffic disruptions: {e}")
+                print(f"   Response status: {e.response.status_code if hasattr(e, 'response') else 'N/A'}")
                 return []
             except Exception as e:
-                print(f"❌ Unexpected error: {e}")
+                print(f"[ERROR] Unexpected error: {e}")
                 return []
 
     async def get_velib_availability(
@@ -97,7 +106,7 @@ class MobilityService:
             List of Vélib station objects with availability
         """
         if not self.api_key:
-            print("⚠️  IDFM_API_KEY not configured")
+            print("[WARNING] IDFM_API_KEY not configured")
             return []
 
         # Note: Actual endpoint may vary based on IDFM documentation
@@ -107,7 +116,7 @@ class MobilityService:
         if station_id:
             params['station_id'] = station_id
 
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(verify=False) as client:  # Disable SSL verification for Windows compatibility
             try:
                 response = await client.get(
                     url,
@@ -139,16 +148,18 @@ class MobilityService:
                         )
                         stations.append(station)
                     except Exception as e:
-                        print(f"⚠️  Error parsing station: {e}")
+                        print(f"[WARNING] Error parsing station: {e}")
                         continue
 
                 return stations
 
             except httpx.HTTPError as e:
-                print(f"❌ Error fetching Vélib data: {e}")
+                print(f"[ERROR] Error fetching Velib data: {e}")
+                print(f"   Response status: {e.response.status_code if hasattr(e, 'response') else 'N/A'}")
+                print(f"   Response text: {e.response.text[:200] if hasattr(e, 'response') else 'N/A'}")
                 return []
             except Exception as e:
-                print(f"❌ Unexpected error: {e}")
+                print(f"[ERROR] Unexpected error: {e}")
                 return []
 
     async def get_transit_stops(
@@ -167,7 +178,7 @@ class MobilityService:
             List of transit stop objects
         """
         if not self.api_key:
-            print("⚠️  IDFM_API_KEY not configured")
+            print("[WARNING] IDFM_API_KEY not configured")
             return []
 
         url = f"{self.base_url}/stop-monitoring"
@@ -176,7 +187,7 @@ class MobilityService:
         if zone_id:
             params['zone_id'] = zone_id
 
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(verify=False) as client:  # Disable SSL verification for Windows compatibility
             try:
                 response = await client.get(
                     url,
@@ -204,16 +215,17 @@ class MobilityService:
                         )
                         stops.append(stop)
                     except Exception as e:
-                        print(f"⚠️  Error parsing stop: {e}")
+                        print(f"[WARNING] Error parsing stop: {e}")
                         continue
 
                 return stops
 
             except httpx.HTTPError as e:
-                print(f"❌ Error fetching transit stops: {e}")
+                print(f"[ERROR] Error fetching transit stops: {e}")
+                print(f"   Response status: {e.response.status_code if hasattr(e, 'response') else 'N/A'}")
                 return []
             except Exception as e:
-                print(f"❌ Unexpected error: {e}")
+                print(f"[ERROR] Unexpected error: {e}")
                 return []
 
     def _parse_disruption(self, item: Dict) -> TrafficDisruption:

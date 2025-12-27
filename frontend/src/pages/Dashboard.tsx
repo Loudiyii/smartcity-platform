@@ -33,21 +33,21 @@ export const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <KPICard
           title="PM2.5"
-          value={current?.data?.pm25 || 0}
+          value={current?.pm25 || 0}
           unit="μg/m³"
-          severity={getSeverity(current?.data?.pm25 || 0)}
+          severity={getSeverity(current?.pm25 || 0)}
         />
         <KPICard
           title="PM10"
-          value={current?.data?.pm10 || 0}
+          value={current?.pm10 || 0}
           unit="μg/m³"
-          severity={current?.data?.pm10 > 50 ? 'poor' : 'good'}
+          severity={current?.pm10 > 50 ? 'poor' : 'good'}
         />
         <KPICard
           title="NO2"
-          value={current?.data?.no2 || 0}
+          value={current?.no2 || 0}
           unit="μg/m³"
-          severity={current?.data?.no2 > 40 ? 'moderate' : 'good'}
+          severity={current?.no2 > 40 ? 'moderate' : 'good'}
         />
       </div>
 

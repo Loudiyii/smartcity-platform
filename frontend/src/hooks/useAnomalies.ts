@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8001'
 
 interface AnomalyDetectionResponse {
   city: string
@@ -48,14 +48,24 @@ export function useRecentAnomalies(city?: string, hours: number = 24, limit: num
   return useQuery<any[]>({
     queryKey: ['anomalies-recent', city, hours, limit],
     queryFn: async () => {
-      const params: any = { hours, limit }
-      if (city) params.city = city
+      try {
+        const params: any = { hours, limit }
+        if (city) params.city = city
 
-      const response = await axios.get(`${API_BASE_URL}/api/v1/anomalies/recent`, { params })
-      return response.data
+        const response = await axios.get(`${API_BASE_URL}/api/v1/anomalies/recent`, { params })
+        return response.data
+      } catch (error: any) {
+        // Handle missing table gracefully - return empty array
+        if (error.response?.status === 500) {
+          console.warn('[Anomalies] Table may not exist yet, returning empty array')
+          return []
+        }
+        throw error
+      }
     },
     staleTime: 60000, // 1 minute
-    refetchInterval: 60000
+    refetchInterval: 60000,
+    retry: false // Don't retry on error
   })
 }
 

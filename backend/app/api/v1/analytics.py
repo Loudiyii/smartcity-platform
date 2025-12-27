@@ -112,7 +112,7 @@ async def get_correlation_data(
             'city': city,
             'days': days,
             'data_points': len(merged_df),
-            'timestamps': merged_df['timestamp'].dt.isoformat().tolist(),
+            'timestamps': [ts.isoformat() for ts in merged_df['timestamp'].tolist()],
             'pollution': {
                 'pm25': merged_df['pm25'].tolist(),
                 'pm10': merged_df['pm10'].tolist(),
