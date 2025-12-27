@@ -2,8 +2,6 @@ import React from 'react'
 import { MapContainer, TileLayer, LayersControl } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 
-const { Overlay } = LayersControl
-
 interface LeafletMapProps {
   children?: React.ReactNode
   center?: [number, number]
