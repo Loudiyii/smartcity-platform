@@ -5,7 +5,7 @@ python-multipart==0.0.6
 
 # Database
 supabase==2.10.0
-postgrest==0.13.2
+postgrest==0.18.0
 
 # Environment & Config
 python-dotenv==1.0.0
