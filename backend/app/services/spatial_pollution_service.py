@@ -70,12 +70,15 @@ class SpatialPollutionService:
                 'message': 'Aucun capteur IoT trouvé avec localisation'
             }
 
-        # Get recent pollution measurements
+        # Get recent pollution measurements from sensors
+        # Get sensor IDs from sensor_metadata
+        sensor_ids = [s['sensor_id'] for s in sensors]
+
         start_time = datetime.utcnow() - timedelta(hours=hours_back)
 
         measurements_response = self.supabase.table('air_quality_measurements')\
             .select('*')\
-            .eq('source', 'iot_sensor')\
+            .in_('sensor_id', sensor_ids)\
             .gte('timestamp', start_time.isoformat())\
             .execute()
 
@@ -84,7 +87,7 @@ class SpatialPollutionService:
         if not measurements or len(measurements) < 5:
             return {
                 'status': 'insufficient_data',
-                'message': f'Pas assez de mesures IoT (besoin de 5+, trouvé {len(measurements) if measurements else 0})'
+                'message': f'Pas assez de mesures de capteurs (besoin de 5+, trouvé {len(measurements) if measurements else 0})'
             }
 
         # For this demo, we'll use known Paris transit coordinates
