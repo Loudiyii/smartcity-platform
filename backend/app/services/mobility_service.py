@@ -60,38 +60,43 @@ class MobilityService:
 
                 for item in disruptions_list:
                     try:
-                        # Extract severity
-                        item_severity = item.get('severity', {}).get('name', 'unknown').lower()
+                        # Extract severity (v2 API returns string, not object)
+                        item_severity = item.get('severity', 'unknown').lower()
 
                         # Filter by severity if provided
                         if severity and item_severity != severity.lower():
                             continue
 
-                        # Check if active
-                        is_active = item.get('status', 'active') == 'active'
+                        # Check if active (v2 API uses applicationPeriods to determine active status)
+                        application_periods = item.get('applicationPeriods', [])
+                        is_active = len(application_periods) > 0
                         if active_only and not is_active:
                             continue
 
-                        # Get affected lines
-                        impacted_objects = item.get('impacted_objects', [])
+                        # Get affected lines from impactedSections
+                        impacted_sections = item.get('impactedSections', [])
                         line_id = None
                         line_name = None
-                        if impacted_objects:
-                            pt_object = impacted_objects[0].get('pt_object', {})
-                            line_id = pt_object.get('id', '')
-                            line_name = pt_object.get('name', 'Unknown')
+                        if impacted_sections:
+                            first_section = impacted_sections[0]
+                            line_id = first_section.get('lineId', '')
+                            # Extract line name from the from/to section names
+                            from_name = first_section.get('from', {}).get('name', '')
+                            to_name = first_section.get('to', {}).get('name', '')
+                            line_name = f"{from_name} → {to_name}" if from_name and to_name else 'Unknown'
 
-                        # Get messages
-                        messages = item.get('messages', [])
-                        message_text = messages[0].get('text', 'No details') if messages else 'No details'
+                        # Get message text (v2 API returns message as string)
+                        message_text = item.get('message', '') or item.get('shortMessage', 'No details')
+                        # Strip HTML tags from message
+                        import re
+                        message_text = re.sub('<[^<]+?>', '', message_text)
 
                         # Get timeframe
-                        application_periods = item.get('application_periods', [])
                         start_time = None
                         end_time = None
                         if application_periods:
                             start_time = application_periods[0].get('begin')
-                            end_time = application_periods[0].get('end')
+                            end_time = application_periods[-1].get('end')  # Use last period end
 
                         disruption = TrafficDisruption(
                             disruption_id=item.get('id', ''),
