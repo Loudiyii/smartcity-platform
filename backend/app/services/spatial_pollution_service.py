@@ -78,7 +78,7 @@ class SpatialPollutionService:
 
         measurements_response = self.supabase.table('air_quality_measurements')\
             .select('*')\
-            .in_('sensor_id', sensor_ids)\
+            .in_('source', sensor_ids)\
             .gte('timestamp', start_time.isoformat())\
             .execute()
 
@@ -110,7 +110,7 @@ class SpatialPollutionService:
         # Group measurements by sensor
         sensor_measurements = {}
         for m in measurements:
-            sensor_id = m.get('sensor_id', 'unknown')
+            sensor_id = m.get('source', 'unknown')  # Use 'source' field from air_quality_measurements
             if sensor_id not in sensor_measurements:
                 sensor_measurements[sensor_id] = []
             sensor_measurements[sensor_id].append(m)
