@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { usePM25Prediction, useTrainModel } from '../hooks/usePredictions'
 import { PredictionCard } from '../components/Predictions/PredictionCard'
 
-const CITIES = ['Paris', 'Lyon', 'Marseille']
+const CITIES = ['Paris']
 
 export const Predictions: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState('Paris')
