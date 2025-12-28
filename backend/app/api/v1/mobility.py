@@ -14,7 +14,7 @@ from app.models.mobility import (
     VelibStatsResponse,
     StopDepartures
 )
-from app.config import get_settings
+from app.config import get_settings, get_supabase_client
 
 settings = get_settings()
 
@@ -163,9 +163,7 @@ async def get_spatial_pollution_analysis(
     /api/v1/mobility/spatial-pollution-analysis?hours_back=48
     ```
     """
-    from supabase import create_client
-
-    supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_SERVICE_KEY)
+    supabase = get_supabase_client()
     service = SpatialPollutionService(supabase)
 
     analysis = await service.analyze_pollution_near_stops(hours_back)
