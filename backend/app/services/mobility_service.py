@@ -5,8 +5,9 @@ Fetches real-time mobility data: Vélib, traffic disruptions, transit stops
 
 import httpx
 from typing import List, Optional, Dict
+from datetime import datetime
 from app.config import get_settings
-from app.models.mobility import TrafficDisruption, VelibStation, TransitStop
+from app.models.mobility import TrafficDisruption, VelibStation, TransitStop, StopDepartures, NextDeparture
 
 settings = get_settings()
 
@@ -281,6 +282,121 @@ class MobilityService:
             except Exception as e:
                 print(f"[ERROR] Unexpected error: {e}")
                 return []
+
+    async def get_next_departures(
+        self,
+        stop_id: str,
+        limit: int = 10
+    ) -> Optional[StopDepartures]:
+        """
+        Fetch next departures/arrivals at a specific transit stop.
+
+        Args:
+            stop_id: IDFM stop monitoring reference (e.g., "STIF:StopPoint:Q:41322:")
+            limit: Maximum number of departures to return
+
+        Returns:
+            StopDepartures object with next departures, or None if error
+        """
+        if not self.api_key:
+            print("[WARNING] IDFM_API_KEY not configured")
+            return None
+
+        # IDFM stop-monitoring endpoint
+        url = f"{self.base_url}/stop-monitoring"
+
+        params = {
+            'MonitoringRef': stop_id
+        }
+
+        async with httpx.AsyncClient(verify=False) as client:
+            try:
+                response = await client.get(
+                    url,
+                    headers=self.headers,
+                    params=params,
+                    timeout=10.0
+                )
+                response.raise_for_status()
+                data = response.json()
+
+                # Parse SIRI Lite response
+                siri = data.get('Siri', {})
+                service_delivery = siri.get('ServiceDelivery', {})
+                stop_monitoring_deliveries = service_delivery.get('StopMonitoringDelivery', [])
+
+                if not stop_monitoring_deliveries:
+                    print(f"[WARNING] No monitoring data for stop {stop_id}")
+                    return None
+
+                delivery = stop_monitoring_deliveries[0]
+                monitored_stop_visits = delivery.get('MonitoredStopVisit', [])
+
+                departures = []
+                stop_name = "Unknown"
+
+                for visit in monitored_stop_visits[:limit]:
+                    try:
+                        monitored_vehicle_journey = visit.get('MonitoredVehicleJourney', {})
+
+                        # Extract stop name
+                        if not stop_name or stop_name == "Unknown":
+                            monitored_call = monitored_vehicle_journey.get('MonitoredCall', {})
+                            stop_name = monitored_call.get('StopPointName', [{}])[0].get('value', 'Unknown')
+
+                        # Extract line info
+                        line_ref = monitored_vehicle_journey.get('LineRef', {}).get('value', '')
+                        published_line_name = monitored_vehicle_journey.get('PublishedLineName', [{}])[0].get('value', 'Unknown')
+
+                        # Extract destination
+                        destination_ref = monitored_vehicle_journey.get('DestinationRef', {}).get('value', '')
+                        destination_name = monitored_vehicle_journey.get('DestinationName', [{}])[0].get('value', 'Unknown')
+
+                        # Extract expected arrival time
+                        monitored_call = monitored_vehicle_journey.get('MonitoredCall', {})
+                        expected_arrival = monitored_call.get('ExpectedArrivalTime')
+                        expected_departure = monitored_call.get('ExpectedDepartureTime')
+
+                        arrival_time_str = expected_arrival or expected_departure
+                        if not arrival_time_str:
+                            continue
+
+                        # Parse ISO 8601 datetime
+                        arrival_time = datetime.fromisoformat(arrival_time_str.replace('Z', '+00:00'))
+
+                        # Extract arrival status
+                        arrival_status = monitored_call.get('ArrivalStatus', 'onTime')
+
+                        # Vehicle reference
+                        vehicle_ref = monitored_vehicle_journey.get('VehicleRef', {}).get('value')
+
+                        departure = NextDeparture(
+                            line_id=line_ref,
+                            line_name=published_line_name,
+                            destination_name=destination_name,
+                            expected_arrival_time=arrival_time,
+                            arrival_status=arrival_status,
+                            vehicle_ref=vehicle_ref
+                        )
+                        departures.append(departure)
+
+                    except Exception as e:
+                        print(f"[WARNING] Error parsing departure: {e}")
+                        continue
+
+                return StopDepartures(
+                    stop_id=stop_id,
+                    stop_name=stop_name,
+                    departures=departures
+                )
+
+            except httpx.HTTPError as e:
+                print(f"[ERROR] Error fetching next departures: {e}")
+                print(f"   Response status: {e.response.status_code if hasattr(e, 'response') else 'N/A'}")
+                return None
+            except Exception as e:
+                print(f"[ERROR] Unexpected error: {e}")
+                return None
 
     def _parse_disruption(self, item: Dict) -> TrafficDisruption:
         """Parse raw API disruption into structured model."""

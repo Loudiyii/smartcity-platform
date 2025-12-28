@@ -10,7 +10,8 @@ from app.models.mobility import (
     TrafficDisruption,
     VelibStation,
     TransitStop,
-    VelibStatsResponse
+    VelibStatsResponse,
+    StopDepartures
 )
 
 router = APIRouter(prefix="/api/v1/mobility", tags=["mobility"])
@@ -76,6 +77,37 @@ async def get_transit_stops(
     """
     stops = await service.get_transit_stops(limit, zone_id)
     return stops
+
+
+@router.get("/transit/next-departures/{stop_id}", response_model=StopDepartures)
+async def get_next_departures(
+    stop_id: str,
+    limit: int = Query(10, le=50, description="Maximum number of departures"),
+    service: MobilityService = Depends(get_mobility_service)
+):
+    """
+    Get next departures/arrivals at a specific transit stop in real-time.
+
+    **Parameters:**
+    - stop_id: IDFM stop monitoring reference (e.g., "STIF:StopPoint:Q:41322:")
+    - limit: Maximum number of departures to return (default: 10, max: 50)
+
+    **Returns:** Real-time departures with estimated arrival times
+
+    **Example:**
+    ```
+    /api/v1/mobility/transit/next-departures/STIF:StopPoint:Q:41322:?limit=5
+    ```
+    """
+    departures = await service.get_next_departures(stop_id, limit)
+
+    if not departures:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No real-time data available for stop {stop_id}. Either the stop doesn't exist or real-time data is not yet available for this stop."
+        )
+
+    return departures
 
 
 @router.get("/velib/stats", response_model=VelibStatsResponse)

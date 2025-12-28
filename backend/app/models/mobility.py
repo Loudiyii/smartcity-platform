@@ -62,3 +62,27 @@ class VelibStatsResponse(BaseModel):
     total_bikes_available: int
     total_docks_available: int
     average_availability_percent: float
+
+
+class NextDeparture(BaseModel):
+    """Next departure/arrival at a transit stop."""
+    line_id: str
+    line_name: str
+    destination_name: str
+    expected_arrival_time: datetime
+    arrival_status: str = Field(default="onTime", description="onTime, delayed, early, cancelled")
+    vehicle_ref: Optional[str] = None
+
+    @property
+    def minutes_until_arrival(self) -> int:
+        """Calculate minutes until arrival from now."""
+        diff = self.expected_arrival_time - datetime.utcnow()
+        return max(0, int(diff.total_seconds() / 60))
+
+
+class StopDepartures(BaseModel):
+    """Departures at a specific transit stop."""
+    stop_id: str
+    stop_name: str
+    departures: list[NextDeparture] = Field(default_factory=list)
+    last_updated: datetime = Field(default_factory=datetime.utcnow)
