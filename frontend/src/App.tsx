@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { Dashboard } from './pages/Dashboard'
 import { DashboardMap } from './pages/DashboardMap'
 import { Predictions } from './pages/Predictions'
+import { Mobility } from './pages/Mobility'
 import { Analytics } from './pages/Analytics'
 import { Reports } from './pages/Reports'
 import MobilityImpact from './pages/MobilityImpact'
@@ -40,6 +41,12 @@ function App() {
                   Prédictions
                 </Link>
                 <Link
+                  to="/mobility"
+                  className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                >
+                  Mobilité
+                </Link>
+                <Link
                   to="/analytics"
                   className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
                 >
@@ -72,6 +79,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/map" element={<DashboardMap />} />
             <Route path="/predictions" element={<Predictions />} />
+            <Route path="/mobility" element={<Mobility />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/mobility-impact" element={<MobilityImpact />} />
             <Route path="/reports" element={<Reports />} />
