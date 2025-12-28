@@ -28,7 +28,7 @@ class MobilityService:
         active_only: bool = True
     ) -> List[TrafficDisruption]:
         """
-        Fetch current traffic disruptions from IDFM general-message API.
+        Fetch current traffic disruptions from IDFM disruptions_bulk API.
 
         Args:
             severity: Filter by severity (low, medium, high, critical)
@@ -41,44 +41,73 @@ class MobilityService:
             print("[WARNING] IDFM_API_KEY not configured")
             return []
 
-        url = f"{self.base_url}/general-message"
+        url = f"{self.base_url}/disruptions_bulk/disruptions/v2"
 
-        params = {}
-        if severity:
-            params['severity'] = severity
-
-        async with httpx.AsyncClient(verify=False) as client:  # Disable SSL verification for Windows compatibility
+        async with httpx.AsyncClient(verify=False) as client:
             try:
                 response = await client.get(
                     url,
                     headers=self.headers,
-                    params=params,
                     timeout=10.0
                 )
                 response.raise_for_status()
                 data = response.json()
 
-                # Check for IDFM API errors
-                siri = data.get('Siri', {})
-                service_delivery = siri.get('ServiceDelivery', {})
-                message_delivery = service_delivery.get('GeneralMessageDelivery', [{}])[0]
-
-                # Check for error condition
-                error_condition = message_delivery.get('ErrorCondition')
-                if error_condition:
-                    error_info = error_condition.get('ErrorInformation', {})
-                    error_text = error_info.get('ErrorText', 'Unknown error')
-                    print(f"[WARNING] IDFM API error: {error_text}")
-                    return []
-
-                info_messages = message_delivery.get('InfoMessage', [])
                 disruptions = []
 
-                for item in info_messages:
-                    disruption = self._parse_disruption(item)
-                    if active_only and not disruption.is_active:
+                # Parse disruptions array
+                disruptions_list = data.get('disruptions', [])
+
+                for item in disruptions_list:
+                    try:
+                        # Extract severity
+                        item_severity = item.get('severity', {}).get('name', 'unknown').lower()
+
+                        # Filter by severity if provided
+                        if severity and item_severity != severity.lower():
+                            continue
+
+                        # Check if active
+                        is_active = item.get('status', 'active') == 'active'
+                        if active_only and not is_active:
+                            continue
+
+                        # Get affected lines
+                        impacted_objects = item.get('impacted_objects', [])
+                        line_id = None
+                        line_name = None
+                        if impacted_objects:
+                            pt_object = impacted_objects[0].get('pt_object', {})
+                            line_id = pt_object.get('id', '')
+                            line_name = pt_object.get('name', 'Unknown')
+
+                        # Get messages
+                        messages = item.get('messages', [])
+                        message_text = messages[0].get('text', 'No details') if messages else 'No details'
+
+                        # Get timeframe
+                        application_periods = item.get('application_periods', [])
+                        start_time = None
+                        end_time = None
+                        if application_periods:
+                            start_time = application_periods[0].get('begin')
+                            end_time = application_periods[0].get('end')
+
+                        disruption = TrafficDisruption(
+                            disruption_id=item.get('id', ''),
+                            line_id=line_id,
+                            line_name=line_name,
+                            severity=item_severity,
+                            message=message_text,
+                            start_time=start_time,
+                            end_time=end_time,
+                            is_active=is_active
+                        )
+                        disruptions.append(disruption)
+
+                    except Exception as e:
+                        print(f"[WARNING] Error parsing disruption: {e}")
                         continue
-                    disruptions.append(disruption)
 
                 return disruptions
 
@@ -96,7 +125,7 @@ class MobilityService:
         limit: int = 50
     ) -> List[VelibStation]:
         """
-        Fetch Vélib station availability from IDFM bike-sharing API.
+        Fetch Vélib station availability from IDFM GBFS API.
 
         Args:
             station_id: Specific station ID (optional)
@@ -109,42 +138,60 @@ class MobilityService:
             print("[WARNING] IDFM_API_KEY not configured")
             return []
 
-        # Note: Actual endpoint may vary based on IDFM documentation
-        url = f"{self.base_url}/bike-sharing"
+        # GBFS endpoints
+        status_url = f"{self.base_url}/velib/station_status.json"
+        info_url = f"{self.base_url}/velib/station_information.json"
 
-        params = {'limit': limit}
-        if station_id:
-            params['station_id'] = station_id
-
-        async with httpx.AsyncClient(verify=False) as client:  # Disable SSL verification for Windows compatibility
+        async with httpx.AsyncClient(verify=False) as client:
             try:
-                response = await client.get(
-                    url,
+                # Fetch station status (availability)
+                status_response = await client.get(
+                    status_url,
                     headers=self.headers,
-                    params=params,
                     timeout=10.0
                 )
-                response.raise_for_status()
-                data = response.json()
+                status_response.raise_for_status()
+                status_data = status_response.json()
+
+                # Fetch station information (location, name)
+                info_response = await client.get(
+                    info_url,
+                    headers=self.headers,
+                    timeout=10.0
+                )
+                info_response.raise_for_status()
+                info_data = info_response.json()
+
+                # Parse GBFS format
+                stations_status = status_data.get('data', {}).get('stations', [])
+                stations_info = info_data.get('data', {}).get('stations', [])
+
+                # Create lookup dict for info
+                info_dict = {s['station_id']: s for s in stations_info}
 
                 stations = []
 
-                # Parse response (structure may vary)
-                station_list = data.get('stations', [])
-
-                for item in station_list[:limit]:
+                for status in stations_status[:limit]:
                     try:
+                        station_id_val = str(status.get('station_id', ''))
+
+                        # Filter by station_id if provided
+                        if station_id and station_id_val != station_id:
+                            continue
+
+                        info = info_dict.get(station_id_val, {})
+
                         station = VelibStation(
-                            station_id=str(item.get('stationCode', item.get('station_id', ''))),
-                            name=item.get('name', 'Unknown'),
-                            num_bikes_available=item.get('nbBike', item.get('num_bikes_available', 0)),
-                            num_docks_available=item.get('nbFreeDock', item.get('num_docks_available', 0)),
-                            latitude=item.get('coordonnees_geo', {}).get('lat', item.get('lat', 0.0)),
-                            longitude=item.get('coordonnees_geo', {}).get('lon', item.get('lon', 0.0)),
-                            is_installed=item.get('is_installed', 1) == 1,
-                            is_returning=item.get('is_returning', 1) == 1,
-                            is_renting=item.get('is_renting', 1) == 1,
-                            last_reported=item.get('dueDate')
+                            station_id=station_id_val,
+                            name=info.get('name', 'Unknown'),
+                            num_bikes_available=status.get('num_bikes_available', 0),
+                            num_docks_available=status.get('num_docks_available', 0),
+                            latitude=info.get('lat', 0.0),
+                            longitude=info.get('lon', 0.0),
+                            is_installed=status.get('is_installed', 1) == 1,
+                            is_returning=status.get('is_returning', 1) == 1,
+                            is_renting=status.get('is_renting', 1) == 1,
+                            last_reported=status.get('last_reported')
                         )
                         stations.append(station)
                     except Exception as e:
