@@ -31,6 +31,42 @@ interface StopDepartures {
   departures: NextDeparture[]
 }
 
+interface SpatialAnalysis {
+  status: string
+  analysis_period_hours: number
+  zones: {
+    near_transit: {
+      description: string
+      avg_pm25: number
+      measurements_count: number
+      sensors_count: number
+    }
+    far_transit: {
+      description: string
+      avg_pm25: number
+      measurements_count: number
+      sensors_count: number
+    }
+  }
+  comparison: {
+    difference_pm25: number
+    percent_increase: number
+    is_significant: boolean
+    interpretation: string
+  }
+  sensor_details: Array<{
+    sensor_id: string
+    latitude: number
+    longitude: number
+    distance_to_nearest_stop: number
+    nearest_hub: string
+    avg_pm25: number
+    measurements_count: number
+    zone: string
+  }>
+  insights: string[]
+}
+
 export const Mobility: React.FC = () => {
   const [stopId, setStopId] = useState('')
   const [searchStopId, setSearchStopId] = useState('')
@@ -56,13 +92,24 @@ export const Mobility: React.FC = () => {
   })
 
   // Fetch next departures for selected stop
-  const { data: departures, isLoading: departuresLoading, error: departuresError } = useQuery<StopDepartures>({
+  const { data: departures, isLoading: departuresLoading, error: departuresError} = useQuery<StopDepartures>({
     queryKey: ['next-departures', searchStopId],
     queryFn: async () => {
       const response = await api.get(`/api/v1/mobility/transit/next-departures/${searchStopId}?limit=10`)
       return response.data
     },
     enabled: !!searchStopId,
+    retry: false
+  })
+
+  // Fetch spatial pollution analysis
+  const { data: spatialAnalysis, isLoading: spatialLoading } = useQuery<SpatialAnalysis>({
+    queryKey: ['spatial-pollution-analysis'],
+    queryFn: async () => {
+      const response = await api.get('/api/v1/mobility/spatial-pollution-analysis?hours_back=24')
+      return response.data
+    },
+    refetchInterval: 300000, // Refresh every 5 minutes
     retry: false
   })
 
@@ -259,6 +306,162 @@ export const Mobility: React.FC = () => {
             )}
           </div>
         )}
+      </div>
+
+      {/* Spatial Pollution Analysis */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          Pollution à Proximité des Arrêts
+        </h2>
+
+        {spatialLoading ? (
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="animate-pulse">Analyse spatiale en cours...</div>
+          </div>
+        ) : spatialAnalysis ? (
+          <>
+            {/* Comparison Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              {/* Near Transit Card */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="text-sm text-gray-600 mb-1">
+                  🚇 {spatialAnalysis.zones.near_transit.description}
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <div className="text-4xl font-bold text-red-600">
+                    {spatialAnalysis.zones.near_transit.avg_pm25}
+                  </div>
+                  <div className="text-gray-600">μg/m³</div>
+                </div>
+                <div className="text-sm text-gray-500">
+                  {spatialAnalysis.zones.near_transit.sensors_count} capteurs · {spatialAnalysis.zones.near_transit.measurements_count} mesures
+                </div>
+              </div>
+
+              {/* Far Transit Card */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="text-sm text-gray-600 mb-1">
+                  🏠 {spatialAnalysis.zones.far_transit.description}
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <div className="text-4xl font-bold text-green-600">
+                    {spatialAnalysis.zones.far_transit.avg_pm25}
+                  </div>
+                  <div className="text-gray-600">μg/m³</div>
+                </div>
+                <div className="text-sm text-gray-500">
+                  {spatialAnalysis.zones.far_transit.sensors_count} capteurs · {spatialAnalysis.zones.far_transit.measurements_count} mesures
+                </div>
+              </div>
+            </div>
+
+            {/* Comparison Result */}
+            <div className={`rounded-lg border-2 p-6 mb-4 ${
+              spatialAnalysis.comparison.is_significant
+                ? 'bg-orange-50 border-orange-300'
+                : 'bg-green-50 border-green-300'
+            }`}>
+              <div className="font-semibold text-lg mb-2">
+                {spatialAnalysis.comparison.is_significant ? '⚠️ Différence Significative' : '✅ Pollution Homogène'}
+              </div>
+              <div className="text-sm">
+                {spatialAnalysis.comparison.difference_pm25 > 0 ? (
+                  <>
+                    Pollution <strong>+{spatialAnalysis.comparison.difference_pm25} μg/m³</strong> plus élevée
+                    près des arrêts ({spatialAnalysis.comparison.percent_increase > 0 ? '+' : ''}{spatialAnalysis.comparison.percent_increase}%)
+                  </>
+                ) : (
+                  <>
+                    Pollution <strong>{spatialAnalysis.comparison.difference_pm25} μg/m³</strong> plus faible
+                    près des arrêts
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Insights */}
+            {spatialAnalysis.insights && spatialAnalysis.insights.length > 0 && (
+              <div className="bg-white rounded-lg shadow p-6 mb-4">
+                <h3 className="font-semibold text-lg mb-3">Analyse Spatiale</h3>
+                <ul className="space-y-2">
+                  {spatialAnalysis.insights.map((insight, index) => (
+                    <li key={index} className="flex items-start gap-2 text-sm">
+                      <span className="text-blue-600 mt-1">→</span>
+                      <span className="text-gray-800">{insight}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Sensor Details Table */}
+            {spatialAnalysis.sensor_details && spatialAnalysis.sensor_details.length > 0 && (
+              <div className="bg-white rounded-lg shadow overflow-hidden">
+                <div className="bg-gray-50 px-6 py-3 border-b">
+                  <h3 className="font-semibold">Détails par Capteur</h3>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Capteur
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Arrêt le plus proche
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Distance
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          PM2.5 moyen
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Zone
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {spatialAnalysis.sensor_details.map((sensor) => (
+                        <tr key={sensor.sensor_id}>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {sensor.sensor_id}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {sensor.nearest_hub}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {sensor.distance_to_nearest_stop}m
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            <span className={`font-semibold ${
+                              sensor.avg_pm25 > 50 ? 'text-red-600' :
+                              sensor.avg_pm25 > 25 ? 'text-orange-600' :
+                              'text-green-600'
+                            }`}>
+                              {sensor.avg_pm25} μg/m³
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                              sensor.zone === 'near_transit' ? 'bg-red-100 text-red-800' :
+                              sensor.zone === 'far_transit' ? 'bg-green-100 text-green-800' :
+                              'bg-gray-100 text-gray-800'
+                            }`}>
+                              {sensor.zone === 'near_transit' ? 'Près transit' :
+                               sensor.zone === 'far_transit' ? 'Loin transit' :
+                               'Moyenne'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </>
+        ) : null}
       </div>
 
       {/* Info Box */}
