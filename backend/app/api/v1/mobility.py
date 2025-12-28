@@ -4,8 +4,9 @@ Vélib, traffic disruptions, transit stops
 """
 
 from fastapi import APIRouter, HTTPException, Depends, Query
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from app.services.mobility_service import MobilityService
+from app.services.spatial_pollution_service import SpatialPollutionService
 from app.models.mobility import (
     TrafficDisruption,
     VelibStation,
@@ -13,6 +14,9 @@ from app.models.mobility import (
     VelibStatsResponse,
     StopDepartures
 )
+from app.config import get_settings
+
+settings = get_settings()
 
 router = APIRouter(prefix="/api/v1/mobility", tags=["mobility"])
 
@@ -135,3 +139,40 @@ async def get_velib_stats(
         total_docks_available=total_docks,
         average_availability_percent=round(avg_availability, 2)
     )
+
+
+@router.get("/spatial-pollution-analysis", response_model=Dict[str, Any])
+async def get_spatial_pollution_analysis(
+    hours_back: int = Query(24, le=168, description="Hours of data to analyze (max 1 week)")
+):
+    """
+    Analyze pollution levels around transit stops (spatial analysis).
+
+    Compares PM2.5 levels from sensors near transit hubs (<200m)
+    vs sensors far from transit (>500m) to identify pollution hotspots.
+
+    **Parameters:**
+    - hours_back: Number of hours of historical data (default: 24h, max: 168h/1 week)
+
+    **Returns:**
+    Spatial analysis showing if pollution is higher near transit stops,
+    with sensor-by-sensor details and policy recommendations.
+
+    **Example:**
+    ```
+    /api/v1/mobility/spatial-pollution-analysis?hours_back=48
+    ```
+    """
+    from supabase import create_client
+
+    supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_SERVICE_KEY)
+    service = SpatialPollutionService(supabase)
+
+    analysis = await service.analyze_pollution_near_stops(hours_back)
+
+    if analysis['status'] == 'error':
+        raise HTTPException(status_code=500, detail=analysis['message'])
+    elif analysis['status'] == 'insufficient_data':
+        raise HTTPException(status_code=404, detail=analysis['message'])
+
+    return analysis
