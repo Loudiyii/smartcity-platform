@@ -57,6 +57,7 @@ class MobilityService:
 
                 # Parse disruptions array
                 disruptions_list = data.get('disruptions', [])
+                print(f"[DEBUG] Fetched {len(disruptions_list)} disruptions from IDFM API")
 
                 for item in disruptions_list:
                     try:
@@ -114,6 +115,7 @@ class MobilityService:
                         print(f"[WARNING] Error parsing disruption: {e}")
                         continue
 
+                print(f"[DEBUG] Returning {len(disruptions)} disruptions after filtering")
                 return disruptions
 
             except httpx.HTTPError as e:
