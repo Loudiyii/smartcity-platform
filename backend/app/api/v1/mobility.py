@@ -181,6 +181,9 @@ async def get_spatial_pollution_analysis(
             raise HTTPException(status_code=404, detail=analysis['message'])
 
         return analysis
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        raise
     except Exception as e:
         print(f"[ERROR] Spatial pollution analysis failed: {str(e)}")
         print(f"[ERROR] Exception type: {type(e).__name__}")
