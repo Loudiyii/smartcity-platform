@@ -46,7 +46,8 @@ async def create_measurement(measurement: AirQualityCreate):
     supabase = get_supabase_client()
     service = SupabaseService(supabase)
 
-    data = measurement.model_dump(exclude_none=True)
+    # Use mode='json' to serialize datetime objects to ISO strings
+    data = measurement.model_dump(exclude_none=True, mode='json')
     result = await service.insert_air_quality(data)
 
     if not result:
