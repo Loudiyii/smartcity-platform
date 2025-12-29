@@ -69,7 +69,6 @@ class IoTSensor:
         return {
             "source": self.sensor_id,
             "city": "paris",
-            "location": self.location,
             "pm25": pm25,
             "pm10": pm10,
             "no2": round(random.uniform(10, 40), 2),
