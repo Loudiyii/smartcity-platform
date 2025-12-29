@@ -141,6 +141,12 @@ async def get_velib_stats(
     )
 
 
+@router.get("/spatial-pollution-test")
+async def spatial_pollution_test():
+    """Test endpoint to verify routing works."""
+    return {"status": "ok", "message": "Spatial pollution endpoint routing works!"}
+
+
 @router.get("/spatial-pollution-analysis", response_model=Dict[str, Any])
 async def get_spatial_pollution_analysis(
     hours_back: int = Query(24, le=168, description="Hours of data to analyze (max 1 week)")
@@ -163,14 +169,21 @@ async def get_spatial_pollution_analysis(
     /api/v1/mobility/spatial-pollution-analysis?hours_back=48
     ```
     """
-    supabase = get_supabase_client()
-    service = SpatialPollutionService(supabase)
+    try:
+        supabase = get_supabase_client()
+        service = SpatialPollutionService(supabase)
 
-    analysis = await service.analyze_pollution_near_stops(hours_back)
+        analysis = await service.analyze_pollution_near_stops(hours_back)
 
-    if analysis['status'] == 'error':
-        raise HTTPException(status_code=500, detail=analysis['message'])
-    elif analysis['status'] == 'insufficient_data':
-        raise HTTPException(status_code=404, detail=analysis['message'])
+        if analysis['status'] == 'error':
+            raise HTTPException(status_code=500, detail=analysis['message'])
+        elif analysis['status'] == 'insufficient_data':
+            raise HTTPException(status_code=404, detail=analysis['message'])
 
-    return analysis
+        return analysis
+    except Exception as e:
+        print(f"[ERROR] Spatial pollution analysis failed: {str(e)}")
+        print(f"[ERROR] Exception type: {type(e).__name__}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
