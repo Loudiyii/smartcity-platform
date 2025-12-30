@@ -89,12 +89,41 @@ def run_iot_worker():
     print("[IOT] All 5 sensors started (15min interval)")
 
 
+async def auto_train_models():
+    """Auto-train ML models on startup if not exists."""
+    from app.ml.trainer import PM25ModelTrainer
+    from pathlib import Path
+
+    print("[ML] Checking for trained models...")
+
+    supabase = get_supabase_client()
+    trainer = PM25ModelTrainer(supabase)
+
+    cities = ["paris"]
+    for city in cities:
+        model_path = trainer.model_dir / f"pm25_{city.lower()}.pkl"
+
+        if not model_path.exists():
+            print(f"[ML] No model found for {city}, training now...")
+            try:
+                result = await trainer.train(city=city, days=30)
+                trainer.save_model(city)
+                print(f"[ML] ✅ Model trained for {city}: R²={result['metrics']['r2']:.4f}, MAPE={result['metrics']['mape']:.2f}%")
+            except Exception as e:
+                print(f"[ML] ⚠️ Failed to train model for {city}: {e}")
+        else:
+            print(f"[ML] ✅ Model already exists for {city}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifecycle events for startup and shutdown."""
     # Startup
     print("Smart City API starting...")
     print(f"Environment: {settings.ENVIRONMENT}")
+
+    # Auto-train ML models if needed
+    await auto_train_models()
 
     # Start IoT worker in production
     if settings.ENVIRONMENT == "production":
