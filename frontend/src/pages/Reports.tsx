@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8001'
-const CITIES = ['Paris', 'Lyon', 'Marseille']
+const CITIES = ['Paris']
 
 export const Reports: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState('Paris')

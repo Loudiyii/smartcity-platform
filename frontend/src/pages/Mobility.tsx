@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { LayersControl } from 'react-leaflet'
 import api from '../services/api'
+import { LeafletMap } from '../components/Map/LeafletMap'
+import { TransitStopsLayer } from '../components/Map/TransitStopsLayer'
+import { VelibStationsLayer } from '../components/Map/VelibStationsLayer'
+
+const { Overlay } = LayersControl
 
 interface VelibStats {
   total_stations: number
@@ -217,27 +223,23 @@ export const Mobility: React.FC = () => {
 
       {/* Next Departures */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Prochains Passages</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Carte des Arrêts & Prochains Passages</h2>
 
-        <div className="bg-white rounded-lg shadow p-6 mb-4">
-          <div className="flex gap-3">
-            <input
-              type="text"
-              value={stopId}
-              onChange={(e) => setStopId(e.target.value)}
-              placeholder="ID d'arrêt (ex: STIF:StopPoint:Q:41322:)"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-            <button
-              onClick={handleSearch}
-              disabled={!stopId}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Rechercher
-            </button>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">
-            Les données temps réel ne sont disponibles que pour certains arrêts du réseau IDFM
+        {/* Interactive Map */}
+        <div className="bg-white rounded-lg shadow overflow-hidden mb-4">
+          <LeafletMap height="500px">
+            <Overlay checked name="Arrêts Transport">
+              <TransitStopsLayer onStopClick={(stopId) => setSearchStopId(stopId)} />
+            </Overlay>
+            <Overlay name="Stations Vélib">
+              <VelibStationsLayer />
+            </Overlay>
+          </LeafletMap>
+        </div>
+
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+          <p className="text-sm text-blue-800">
+            💡 <strong>Astuce:</strong> Cliquez sur un arrêt sur la carte pour voir les prochains passages en temps réel
           </p>
         </div>
 
