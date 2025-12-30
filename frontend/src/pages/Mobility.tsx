@@ -74,7 +74,6 @@ interface SpatialAnalysis {
 }
 
 export const Mobility: React.FC = () => {
-  const [stopId, setStopId] = useState('')
   const [searchStopId, setSearchStopId] = useState('')
 
   // Fetch Vélib stats
@@ -118,10 +117,6 @@ export const Mobility: React.FC = () => {
     refetchInterval: 300000, // Refresh every 5 minutes
     retry: false
   })
-
-  const handleSearch = () => {
-    setSearchStopId(stopId)
-  }
 
   const getSeverityColor = (severity: string) => {
     switch (severity.toLowerCase()) {
