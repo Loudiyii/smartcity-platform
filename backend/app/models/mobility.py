@@ -2,7 +2,7 @@
 Pydantic models for IDFM mobility data
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional
 from datetime import datetime
 
@@ -18,6 +18,29 @@ class TrafficDisruption(BaseModel):
     end_time: Optional[datetime] = None
     is_active: bool = True
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+    @field_validator('start_time', 'end_time', mode='before')
+    @classmethod
+    def parse_idfm_datetime(cls, v):
+        """Parse IDFM datetime format (20251229T075200) to datetime object."""
+        if v is None or isinstance(v, datetime):
+            return v
+
+        if isinstance(v, str):
+            # Try IDFM format first: 20251229T075200
+            if len(v) == 15 and 'T' in v:
+                try:
+                    return datetime.strptime(v, '%Y%m%dT%H%M%S')
+                except ValueError:
+                    pass
+
+            # Try ISO format: 2025-12-29T07:52:00
+            try:
+                return datetime.fromisoformat(v.replace('Z', '+00:00'))
+            except ValueError:
+                pass
+
+        return v
 
 
 class VelibStation(BaseModel):

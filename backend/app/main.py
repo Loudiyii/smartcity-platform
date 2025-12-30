@@ -59,6 +59,41 @@ def init_sensor_metadata():
         print(f"[IOT] Sensor metadata init failed: {e}")
 
 
+def run_anomaly_detector():
+    """Background worker to detect and save anomalies."""
+    import asyncio
+    from app.ml.anomaly_detector import AnomalyDetector
+
+    print("[ANOMALY] Starting anomaly detection worker...")
+
+    async def detect_loop():
+        supabase = get_supabase_client()
+        detector = AnomalyDetector(supabase)
+
+        while True:
+            try:
+                print("[ANOMALY] Running anomaly detection for Paris...")
+                result = await detector.detect_all_anomalies("paris", lookback_days=1)
+
+                # Save high/critical anomalies as alerts
+                alerts_created = 0
+                for anomaly in result['anomalies']:
+                    if anomaly['severity'] in ['high', 'critical']:
+                        await detector.save_anomaly_to_alerts(anomaly)
+                        alerts_created += 1
+
+                print(f"[ANOMALY] Detected {result['total_anomalies']} anomalies, created {alerts_created} alerts")
+
+            except Exception as e:
+                print(f"[ANOMALY] Detection failed: {e}")
+
+            # Run every 30 minutes
+            await asyncio.sleep(1800)
+
+    # Run async loop in thread
+    asyncio.run(detect_loop())
+
+
 def run_iot_worker():
     """Background worker to simulate IoT sensors."""
     from app.simulators.iot_sensor import IoTSensor
@@ -130,6 +165,11 @@ async def lifespan(app: FastAPI):
         worker_thread = threading.Thread(target=run_iot_worker, daemon=True)
         worker_thread.start()
         print("[IOT] Worker thread started")
+
+        # Start anomaly detection worker
+        anomaly_thread = threading.Thread(target=run_anomaly_detector, daemon=True)
+        anomaly_thread.start()
+        print("[ANOMALY] Detection thread started")
 
     yield
 
