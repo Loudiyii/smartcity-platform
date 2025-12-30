@@ -72,12 +72,25 @@ The Smart City Platform is an enterprise-grade environmental monitoring system d
 - **Statistical dashboards** with customizable time ranges
 
 ### Authentication & Security
+- **Hybrid authentication model** - Public pages for citizens, protected pages for officials
+  - **Public routes:** Dashboard, Map, Predictions, Mobility (no login required)
+  - **Protected routes:** Analytics, Reports, Mobility Impact (login required)
 - **Supabase Auth integration** for user management
 - **JWT-based authentication** for API access
-- **Email/password registration** with verification emails
-- **Password reset** via email link
+- **Email/password registration** with email verification
+  - Users receive verification email on registration
+  - Account must be verified before login is allowed
+  - Configurable redirect URLs for production deployment
+- **Password reset** via email link with secure token
 - **Secure session management** with automatic token refresh
 - **Row-level security (RLS)** on database tables
+- **ProtectedRoute component** automatically redirects unauthenticated users to login
+- **Tested authentication flow:**
+  ✅ Registration with email verification
+  ✅ Login with JWT token generation
+  ✅ Access control on protected routes
+  ✅ Logout and session cleanup
+  ✅ Redirect prevention for unauthorized access
 
 ### Alert System
 - **Threshold monitoring** for PM2.5, PM10, NO2
@@ -575,6 +588,56 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
+#### Supabase Authentication Configuration
+
+**IMPORTANT:** Before using authentication in production, configure Supabase redirect URLs:
+
+1. **Access Supabase Dashboard:**
+   - Go to https://supabase.com/dashboard
+   - Select your Smart City project
+   - Navigate to: **Authentication** → **URL Configuration**
+
+2. **Configure Redirect URLs:**
+
+   **Site URL:**
+   ```
+   https://frontend-gamma-three-19.vercel.app
+   ```
+
+   **Redirect URLs (Additional):**
+   ```
+   https://frontend-gamma-three-19.vercel.app/**
+   https://frontend-gamma-three-19.vercel.app/login
+   http://localhost:3000/**
+   ```
+
+   This ensures:
+   - ✅ Email verification links redirect to production frontend
+   - ✅ Password reset links work correctly
+   - ✅ OAuth callbacks function properly
+   - ✅ Development environment (localhost:3000) still works
+
+3. **Email Verification Settings:**
+   - Navigate to: **Authentication** → **Providers** → **Email**
+   - **Enable "Confirm email"** for production security
+   - Users must verify their email before they can login
+   - Registration returns empty `access_token` until email is verified
+   - Login fails with "Invalid credentials" until email is verified
+
+4. **Testing Authentication Flow:**
+   ```bash
+   # 1. Register new user
+   POST /api/v1/auth/register
+   # Response: user created, access_token="" (empty)
+
+   # 2. Check email inbox for verification link
+   # Click link → redirects to https://frontend-gamma-three-19.vercel.app
+
+   # 3. Login after verification
+   POST /api/v1/auth/login
+   # Response: user authenticated, access_token="eyJhbGci..." (valid JWT)
+   ```
+
 ### Core Endpoints
 
 #### Air Quality
@@ -768,6 +831,13 @@ All responses follow this structure:
    ```
    https://frontend-gamma-three-19.vercel.app
    ```
+
+5. **Configure Supabase Redirect URLs** (IMPORTANT):
+   - After deploying frontend, update Supabase Authentication settings
+   - Go to: **Authentication** → **URL Configuration** in Supabase Dashboard
+   - Set **Site URL** to your Vercel deployment URL
+   - Add Vercel URL to **Redirect URLs** list
+   - See [Supabase Authentication Configuration](#supabase-authentication-configuration) section for details
 
 ### Database (Supabase)
 
