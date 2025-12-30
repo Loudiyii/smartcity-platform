@@ -55,15 +55,29 @@ The Smart City Platform is an enterprise-grade environmental monitoring system d
 - **IoT sensor locations** with real-time readings
 - **Vélib station availability** (1000+ stations)
 - **Traffic disruptions** from IDFM API
+  - **577 active disruptions** parsed in real-time
+  - **Custom datetime parser** for IDFM format compatibility
+  - **Severity filtering** (information, medium, high, critical)
 - **Transit stops** with real-time departure information
 - **Spatial pollution analysis** using kriging interpolation
 
 ### Advanced Analytics
 - **Pollution-weather correlation** charts
-- **Anomaly detection** using Z-score methodology
+- **Anomaly detection** using Z-score and Isolation Forest algorithms
+  - **Automatic detection** running every 30 minutes in production
+  - **High/critical anomalies** automatically saved to alerts table
+  - **Real-time monitoring** of unusual pollution spikes
 - **Temporal pattern analysis** (hourly, daily, weekly trends)
 - **Mobility impact analysis** on air quality
 - **Statistical dashboards** with customizable time ranges
+
+### Authentication & Security
+- **Supabase Auth integration** for user management
+- **JWT-based authentication** for API access
+- **Email/password registration** with verification emails
+- **Password reset** via email link
+- **Secure session management** with automatic token refresh
+- **Row-level security (RLS)** on database tables
 
 ### Alert System
 - **Threshold monitoring** for PM2.5, PM10, NO2
@@ -187,6 +201,21 @@ The Smart City Platform is an enterprise-grade environmental monitoring system d
 3. **External APIs** (IDFM) → Fetch mobility data on-demand → Return to frontend
 4. **Frontend** → Query backend via REST API → Display in dashboard/maps/charts
 5. **Alerts** → Background worker monitors thresholds → Send email notifications
+
+### Background Workers (Production Only)
+
+The platform runs automated background processes in production:
+
+1. **IoT Sensor Simulator** (continuous)
+   - 5 sensors generating PM2.5, PM10, NO2 data
+   - 15-minute intervals for realistic time-series data
+   - Automatic registration in `sensor_metadata` table
+
+2. **Anomaly Detection Worker** (every 30 minutes)
+   - Runs Z-score and Isolation Forest detection
+   - Analyzes last 24 hours of data
+   - Saves high/critical anomalies to `alerts` table
+   - Enables real-time anomaly monitoring on dashboard
 
 ---
 
@@ -481,10 +510,31 @@ The simulator automatically:
 
 ### Authentication
 
-Most endpoints require JWT authentication:
+Most endpoints require JWT authentication via Supabase Auth:
 
 ```bash
-# 1. Login
+# 1. Register new user
+POST /api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "securepassword",
+  "full_name": "John Doe"  # optional
+}
+
+# Response
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+  "token_type": "bearer",
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "full_name": "John Doe"
+  }
+}
+
+# 2. Login
 POST /api/v1/auth/login
 Content-Type: application/json
 
@@ -496,10 +546,32 @@ Content-Type: application/json
 # Response
 {
   "access_token": "eyJhbGciOiJIUzI1NiIs...",
-  "token_type": "bearer"
+  "token_type": "bearer",
+  "user": {...}
 }
 
-# 2. Use token in subsequent requests
+# 3. Forgot password (sends reset email)
+POST /api/v1/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "user@example.com"
+}
+
+# 4. Reset password (with token from email)
+POST /api/v1/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "reset_token_from_email",
+  "new_password": "newsecurepassword"
+}
+
+# 5. Logout
+POST /api/v1/auth/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+
+# 6. Use token in subsequent requests
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
