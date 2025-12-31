@@ -85,19 +85,26 @@ class MobilityService:
                                     end_str = period.get('end')
 
                                     if begin_str:
-                                        # Parse ISO datetime and ensure it's timezone-aware
+                                        # Parse ISO datetime
                                         begin = datetime.fromisoformat(begin_str.replace('Z', '+00:00'))
-                                        # Force timezone to Paris if naive (IDFM uses local French time)
+
+                                        # Convert to Paris timezone for comparison
                                         if begin.tzinfo is None:
+                                            # Naive datetime - assume Paris time
                                             begin = paris_tz.localize(begin)
+                                        else:
+                                            # Aware datetime - convert to Paris time
+                                            begin = begin.astimezone(paris_tz)
 
                                         # Check if period is currently active
                                         if end_str:
                                             end = datetime.fromisoformat(end_str.replace('Z', '+00:00'))
-                                            # Force timezone to Paris if naive
                                             if end.tzinfo is None:
                                                 end = paris_tz.localize(end)
-                                            # Active if: begin <= now <= end
+                                            else:
+                                                end = end.astimezone(paris_tz)
+
+                                            # Active if: begin <= now <= end (all in Paris timezone)
                                             if begin <= now <= end:
                                                 is_active = True
                                                 break
