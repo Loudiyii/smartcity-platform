@@ -1,7 +1,7 @@
 # Plateforme Smart City
 ## Surveillance de la Qualité de l'Air et de la Mobilité Urbaine
 
-**Projet ESIS-2**
+**Projet ESIC-2**
 **Période :** 18-31 décembre 2025
 **MVP Déployé en Production**
 
@@ -584,7 +584,7 @@ smartcity/
 - **Railway** et **Vercel** pour l'hébergement
 - **AQICN** pour les données de qualité de l'air
 - **IDFM** pour les APIs de mobilité d'Île-de-France
-- **Équipe ESIS-2** pour la collaboration
+- **Équipe ESIC-2** pour la collaboration
 
 ---
 
