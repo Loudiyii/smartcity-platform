@@ -69,9 +69,38 @@ class MobilityService:
                         if severity and item_severity != severity.lower():
                             continue
 
-                        # Check if active (v2 API uses applicationPeriods to determine active status)
+                        # Check if active based on current time and applicationPeriods
                         application_periods = item.get('applicationPeriods', [])
-                        is_active = len(application_periods) > 0
+                        is_active = False
+
+                        if application_periods:
+                            from datetime import timezone
+                            now = datetime.now(timezone.utc)
+                            for period in application_periods:
+                                try:
+                                    begin_str = period.get('begin')
+                                    end_str = period.get('end')
+
+                                    if begin_str:
+                                        # Parse ISO datetime (format: 2024-12-31T12:00:00Z ou 2024-12-31T12:00:00+01:00)
+                                        begin = datetime.fromisoformat(begin_str.replace('Z', '+00:00'))
+
+                                        # Check if period is currently active
+                                        if end_str:
+                                            end = datetime.fromisoformat(end_str.replace('Z', '+00:00'))
+                                            # Active if: begin <= now <= end
+                                            if begin <= now <= end:
+                                                is_active = True
+                                                break
+                                        else:
+                                            # No end time = active if started
+                                            if begin <= now:
+                                                is_active = True
+                                                break
+                                except Exception as e:
+                                    print(f"[WARNING] Error parsing period dates: {e}")
+                                    continue
+
                         if active_only and not is_active:
                             continue
 
