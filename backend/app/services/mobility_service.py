@@ -75,9 +75,9 @@ class MobilityService:
 
                         if application_periods:
                             from datetime import timezone
-                            from zoneinfo import ZoneInfo
+                            import pytz
                             # Use Paris timezone since IDFM API returns local French time
-                            paris_tz = ZoneInfo("Europe/Paris")
+                            paris_tz = pytz.timezone("Europe/Paris")
                             now = datetime.now(paris_tz)
                             for period in application_periods:
                                 try:
@@ -89,14 +89,14 @@ class MobilityService:
                                         begin = datetime.fromisoformat(begin_str.replace('Z', '+00:00'))
                                         # Force timezone to Paris if naive (IDFM uses local French time)
                                         if begin.tzinfo is None:
-                                            begin = begin.replace(tzinfo=paris_tz)
+                                            begin = paris_tz.localize(begin)
 
                                         # Check if period is currently active
                                         if end_str:
                                             end = datetime.fromisoformat(end_str.replace('Z', '+00:00'))
                                             # Force timezone to Paris if naive
                                             if end.tzinfo is None:
-                                                end = end.replace(tzinfo=paris_tz)
+                                                end = paris_tz.localize(end)
                                             # Active if: begin <= now <= end
                                             if begin <= now <= end:
                                                 is_active = True

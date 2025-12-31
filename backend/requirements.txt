@@ -48,6 +48,9 @@ slowapi==0.1.9
 # Logging
 loguru==0.7.2
 
+# Timezone
+pytz==2023.3
+
 # PDF Generation
 reportlab==4.0.8
 matplotlib==3.8.2
