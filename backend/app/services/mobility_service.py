@@ -82,12 +82,18 @@ class MobilityService:
                                     end_str = period.get('end')
 
                                     if begin_str:
-                                        # Parse ISO datetime (format: 2024-12-31T12:00:00Z ou 2024-12-31T12:00:00+01:00)
+                                        # Parse ISO datetime and ensure it's timezone-aware
                                         begin = datetime.fromisoformat(begin_str.replace('Z', '+00:00'))
+                                        # Force timezone to UTC if naive
+                                        if begin.tzinfo is None:
+                                            begin = begin.replace(tzinfo=timezone.utc)
 
                                         # Check if period is currently active
                                         if end_str:
                                             end = datetime.fromisoformat(end_str.replace('Z', '+00:00'))
+                                            # Force timezone to UTC if naive
+                                            if end.tzinfo is None:
+                                                end = end.replace(tzinfo=timezone.utc)
                                             # Active if: begin <= now <= end
                                             if begin <= now <= end:
                                                 is_active = True
@@ -98,7 +104,8 @@ class MobilityService:
                                                 is_active = True
                                                 break
                                 except Exception as e:
-                                    print(f"[WARNING] Error parsing period dates: {e}")
+                                    # Suppress warning in production to reduce log spam
+                                    # print(f"[WARNING] Error parsing period dates: {e}")
                                     continue
 
                         if active_only and not is_active:
