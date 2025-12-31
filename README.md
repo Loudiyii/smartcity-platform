@@ -1,11 +1,11 @@
 # Smart City Platform - Air Quality & Mobility Monitoring
 
-A comprehensive real-time platform for monitoring air quality and urban mobility in metropolitan areas. The platform integrates IoT sensors, external APIs, machine learning predictions, and interactive visualizations to provide actionable environmental insights for city officials, environmental managers, and concerned citizens.
+A real-time platform for monitoring air quality and urban mobility in Paris. This project uses IoT sensors, external APIs, machine learning predictions, and interactive maps to track pollution levels and mobility data.
 
 ## Table of Contents
 
 - [Overview](#overview)
-- [Key Features](#key-features)
+- [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Architecture](#architecture)
 - [Installation](#installation)
@@ -21,214 +21,157 @@ A comprehensive real-time platform for monitoring air quality and urban mobility
 
 ## Overview
 
-The Smart City Platform is an enterprise-grade environmental monitoring system designed to:
+This platform monitors air quality in Paris and predicts pollution levels. It combines:
 
-- **Monitor** air quality in real-time across multiple locations
-- **Predict** pollution levels 24 hours in advance using machine learning
-- **Analyze** correlations between weather, traffic, and air quality
-- **Alert** stakeholders when pollution thresholds are exceeded
-- **Visualize** data through interactive maps and charts
-- **Integrate** mobility data (Vélib stations, traffic disruptions, transit stops)
-- **Generate** comprehensive PDF reports for decision-makers
+- Real-time air quality monitoring from 5 IoT sensors
+- 24-hour pollution predictions using machine learning
+- Analysis of weather, traffic, and air quality correlations
+- Alerts when pollution exceeds safe levels
+- Interactive maps with heatmaps and mobility data
+- Vélib stations, traffic disruptions, and transit info
+- PDF report generation
 
-**Primary User Persona:** Environmental managers like Marie Dubois who need to monitor air quality, predict trends, and make data-driven decisions about pollution control measures.
+Built during December 18-31, 2024 as a student project.
 
 ---
 
-## Key Features
+## Features
 
 ### Real-Time Monitoring
-- **5 IoT sensors** continuously measuring PM2.5, PM10, and NO2 levels
-- **15-minute data intervals** for high-resolution time-series analysis
-- **Live dashboard** with KPI cards showing current conditions
-- **Historical data** tracking for trend analysis
+- 5 IoT sensors measuring PM2.5, PM10, and NO2
+- Data collected every 15 minutes
+- Live dashboard showing current pollution levels
+- Historical data for trend analysis
 
 ### Machine Learning Predictions
-- **Random Forest model** for J+1 (24-hour) PM2.5 forecasting
-- **Auto-training on startup** if models don't exist
-- **Performance metrics:** R² > 0.7, MAPE < 30%
-- **Confidence scores** for each prediction
-- **Feature importance** analysis to understand drivers
+- Random Forest model predicting PM2.5 for next 24 hours
+- Auto-trains on startup if model doesn't exist
+- Performance: R² > 0.7, MAPE < 30%
+- Shows confidence scores for predictions
+- Feature importance analysis
 
 ### Interactive Mapping
-- **Multi-layer Leaflet maps** with pollution heatmaps
-- **IoT sensor locations** with real-time readings
-- **Vélib station availability** (1000+ stations)
-- **Traffic disruptions** from IDFM API
-  - **577 active disruptions** parsed in real-time
-  - **Custom datetime parser** for IDFM format compatibility
-  - **Severity filtering** (information, medium, high, critical)
-- **Transit stops** with real-time departure information
-- **Spatial pollution analysis** using kriging interpolation
+- Leaflet maps with pollution heatmaps
+- IoT sensor locations with real-time readings
+- 1000+ Vélib stations with bike availability
+- Traffic disruptions from IDFM API
+  - 577 active disruptions in real-time
+  - Custom parser for IDFM datetime format
+  - Filter by severity (info, medium, high, critical)
+- Transit stops with departure times
+- Spatial pollution analysis with kriging
 
-### Advanced Analytics
-- **Pollution-weather correlation** charts
-- **Anomaly detection** using Z-score and Isolation Forest algorithms
-  - **Automatic detection** running every 30 minutes in production
-  - **High/critical anomalies** automatically saved to alerts table
-  - **Real-time monitoring** of unusual pollution spikes
-- **Temporal pattern analysis** (hourly, daily, weekly trends)
-- **Mobility impact analysis** on air quality
-- **Statistical dashboards** with customizable time ranges
+### Analytics
+- Pollution vs weather correlation charts
+- Anomaly detection (Z-score and Isolation Forest)
+  - Runs automatically every 30 minutes in production
+  - Saves high/critical anomalies to alerts
+  - Monitors unusual pollution spikes
+- Pattern analysis (hourly, daily, weekly)
+- Mobility impact on air quality
+- Customizable time ranges
 
-### Authentication & Security
-- **Hybrid authentication model** - Public pages for citizens, protected pages for officials
-  - **Public routes:** Dashboard, Map, Predictions, Mobility (no login required)
-  - **Protected routes:** Analytics, Reports, Mobility Impact (login required)
-- **Supabase Auth integration** for user management
-- **JWT-based authentication** for API access
-- **Email/password registration** with email verification
-  - Users receive verification email on registration
-  - Account must be verified before login is allowed
-  - Configurable redirect URLs for production deployment
-- **Password reset** via email link with secure token
-- **Secure session management** with automatic token refresh
-- **Row-level security (RLS)** on database tables
-- **ProtectedRoute component** automatically redirects unauthenticated users to login
-- **Tested authentication flow:**
-  ✅ Registration with email verification
-  ✅ Login with JWT token generation
-  ✅ Access control on protected routes
-  ✅ Logout and session cleanup
-  ✅ Redirect prevention for unauthorized access
+### Authentication
+- Public pages (Dashboard, Map, Predictions, Mobility) - no login needed
+- Protected pages (Analytics, Reports) - login required
+- Supabase Auth for user management
+- JWT tokens for API access
+- Email/password registration with verification
+- Password reset via email
+- Session management with auto-refresh
+- Row-level security on database
+- Tested flow: registration, login, access control, logout
 
-### Alert System
-- **Threshold monitoring** for PM2.5, PM10, NO2
-- **Email notifications** when limits are exceeded
-- **Anomaly alerts** for unusual pollution spikes
-- **Sensor offline detection**
-- **Severity classification** (low, medium, high, critical)
+### Alerts
+- Monitors PM2.5, PM10, NO2 thresholds
+- Email notifications when limits exceeded
+- Anomaly alerts for pollution spikes
+- Sensor offline detection
+- Severity levels (low, medium, high, critical)
 
-### Reporting
-- **PDF report generation** with charts and statistics
-- **Executive summaries** for decision-makers
-- **Customizable time periods** (daily, weekly, monthly)
-- **Data export** in multiple formats
+### Reports
+- PDF generation with charts and stats
+- Customizable time periods (daily, weekly, monthly)
+- Data export in multiple formats
 
 ---
 
 ## Technology Stack
 
 ### Backend
-
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **Python** | 3.11+ | Programming language |
-| **FastAPI** | 0.109.0 | REST API framework |
-| **Uvicorn** | 0.27.0 | ASGI web server |
-| **Supabase** | 2.10.0 | PostgreSQL database & auth |
-| **Scikit-learn** | 1.3.2 | Machine learning models |
-| **Pandas** | 2.1.4 | Data manipulation |
-| **NumPy** | 1.26.3 | Numerical computing |
-| **HTTPX** | 0.27.0 | Async HTTP client |
-| **Pydantic** | 2.5.3 | Data validation |
-| **ReportLab** | 4.0.8 | PDF generation |
-| **Matplotlib** | 3.8.2 | Chart generation |
-| **APScheduler** | 3.10.4 | Task scheduling |
+- Python 3.11+ - main language
+- FastAPI 0.109.0 - REST API
+- Uvicorn 0.27.0 - web server
+- Supabase 2.10.0 - database & auth
+- Scikit-learn 1.3.2 - ML models
+- Pandas 2.1.4 - data processing
+- NumPy 1.26.3 - calculations
+- HTTPX 0.27.0 - HTTP requests
+- Pydantic 2.5.3 - validation
+- ReportLab 4.0.8 - PDF reports
+- Matplotlib 3.8.2 - charts
+- APScheduler 3.10.4 - scheduled tasks
 
 ### Frontend
-
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **React** | 18.2.0 | UI framework |
-| **TypeScript** | 5.3.3 | Type-safe JavaScript |
-| **Vite** | 5.0.8 | Build tool & dev server |
-| **TanStack Query** | 5.13.0 | Server state management |
-| **Zustand** | 4.4.7 | Global state management |
-| **React Router** | 6.30.2 | Client-side routing |
-| **Leaflet** | 1.9.4 | Interactive maps |
-| **Leaflet.heat** | 0.2.0 | Heatmap visualization |
-| **Chart.js** | 4.4.0 | Data charts |
-| **Axios** | 1.6.2 | HTTP client |
-| **Tailwind CSS** | 3.3.6 | Utility-first CSS |
-| **Lucide React** | 0.294.0 | Icon library |
-| **React Hook Form** | 7.48.2 | Form handling |
-| **Zod** | 3.22.4 | Schema validation |
+- React 18.2.0 - UI framework
+- TypeScript 5.3.3 - typed JavaScript
+- Vite 5.0.8 - build tool
+- TanStack Query 5.13.0 - data fetching
+- Zustand 4.4.7 - state management
+- React Router 6.30.2 - routing
+- Leaflet 1.9.4 - maps
+- Leaflet.heat 0.2.0 - heatmaps
+- Chart.js 4.4.0 - charts
+- Axios 1.6.2 - HTTP client
+- Tailwind CSS 3.3.6 - styling
+- Lucide React 0.294.0 - icons
+- React Hook Form 7.48.2 - forms
+- Zod 3.22.4 - validation
 
 ### Database
+- PostgreSQL 17
+- Supabase Cloud (managed PostgreSQL + Auth)
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **PostgreSQL** | 17 | Primary database |
-| **Supabase** | Cloud | Managed PostgreSQL + Auth |
-
-### Infrastructure
-
-| Service | Purpose |
-|---------|---------|
-| **Railway** | Backend deployment |
-| **Vercel** | Frontend deployment |
-| **Supabase Cloud** | Database hosting |
-| **IDFM APIs** | Mobility data (Vélib, traffic, transit) |
+### Deployment
+- Railway - backend hosting
+- Vercel - frontend hosting
+- Supabase Cloud - database
+- IDFM APIs - mobility data
 
 ---
 
 ## Architecture
 
-### High-Level Architecture
+### How It Works
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                          FRONTEND (React)                        │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
-│  │  Dashboard   │  │  Interactive │  │  Analytics   │          │
-│  │   + KPIs     │  │     Map      │  │  + Reports   │          │
-│  └──────────────┘  └──────────────┘  └──────────────┘          │
-│           │                 │                  │                 │
-│           └─────────────────┼──────────────────┘                 │
-│                             │                                    │
-│                    TanStack Query + Axios                        │
-└─────────────────────────────┼──────────────────────────────────┘
-                              │ HTTPS
-                              │
-┌─────────────────────────────┼──────────────────────────────────┐
-│                    BACKEND (FastAPI)                             │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │                    API Routes (v1)                        │  │
-│  │  /air-quality  /predictions  /mobility  /analytics       │  │
-│  └────────┬─────────────┬────────────┬──────────────────────┘  │
-│           │             │            │                          │
-│  ┌────────▼─────┐  ┌────▼────┐  ┌───▼──────┐  ┌────────────┐  │
-│  │   Service    │  │   ML    │  │ External │  │    IoT     │  │
-│  │    Layer     │  │ Models  │  │   APIs   │  │  Sensors   │  │
-│  └────────┬─────┘  └────┬────┘  └───┬──────┘  └──────┬─────┘  │
-│           │             │            │                │         │
-│           └─────────────┴────────────┴────────────────┘         │
-│                              │                                  │
-└──────────────────────────────┼──────────────────────────────────┘
-                               │
-┌──────────────────────────────┼──────────────────────────────────┐
-│                    DATABASE (PostgreSQL)                         │
-│  ┌───────────────────┐  ┌──────────────┐  ┌─────────────────┐  │
-│  │ air_quality_meas  │  │ predictions  │  │ sensor_metadata │  │
-│  ├───────────────────┤  ├──────────────┤  ├─────────────────┤  │
-│  │ weather_data      │  │ alerts       │  │ ...             │  │
-│  └───────────────────┘  └──────────────┘  └─────────────────┘  │
-└──────────────────────────────────────────────────────────────────┘
+Frontend (React) → Backend (FastAPI) → Database (PostgreSQL)
+     ↓                    ↓                      ↓
+Dashboard/Map        API Routes           air_quality_meas
+Analytics         Service Layer          predictions
+Reports           ML Models              alerts
+                  External APIs          weather_data
 ```
 
 ### Data Flow
 
-1. **IoT Sensors** → Generate measurements every 15 minutes → POST to `/api/v1/air-quality/measurements`
-2. **ML Models** → Auto-train on startup → Predict J+1 pollution → Store in `predictions` table
-3. **External APIs** (IDFM) → Fetch mobility data on-demand → Return to frontend
-4. **Frontend** → Query backend via REST API → Display in dashboard/maps/charts
-5. **Alerts** → Background worker monitors thresholds → Send email notifications
+1. IoT Sensors generate measurements every 15 minutes → POST to `/api/v1/air-quality/measurements`
+2. ML Models auto-train on startup → predict next 24h pollution → store in database
+3. IDFM APIs fetch mobility data on-demand → return to frontend
+4. Frontend queries backend via REST API → displays in dashboard/maps/charts
+5. Background worker monitors thresholds → sends email alerts
 
-### Background Workers (Production Only)
+### Background Jobs (Production)
 
-The platform runs automated background processes in production:
-
-1. **IoT Sensor Simulator** (continuous)
+1. IoT Sensor Simulator (continuous)
    - 5 sensors generating PM2.5, PM10, NO2 data
-   - 15-minute intervals for realistic time-series data
-   - Automatic registration in `sensor_metadata` table
+   - 15-minute intervals
+   - Auto-registers in sensor_metadata table
 
-2. **Anomaly Detection Worker** (every 30 minutes)
-   - Runs Z-score and Isolation Forest detection
-   - Analyzes last 24 hours of data
-   - Saves high/critical anomalies to `alerts` table
-   - Enables real-time anomaly monitoring on dashboard
+2. Anomaly Detection (every 30 minutes)
+   - Z-score and Isolation Forest algorithms
+   - Analyzes last 24 hours
+   - Saves high/critical anomalies to alerts table
 
 ---
 
@@ -236,39 +179,37 @@ The platform runs automated background processes in production:
 
 ### Prerequisites
 
-- **Python** 3.11 or higher
-- **Node.js** 18 or higher
-- **npm** or **yarn**
-- **Git**
-- **Supabase account** (free tier)
+- Python 3.11+
+- Node.js 18+
+- npm or yarn
+- Git
+- Supabase account (free tier works)
 
-### Backend Installation
+### Backend Setup
 
-1. **Clone the repository**
+1. Clone the repo
    ```bash
    git clone https://github.com/yourusername/smartcity.git
    cd smartcity/backend
    ```
 
-2. **Create Python virtual environment**
+2. Create virtual environment
    ```bash
    python -m venv venv
 
-   # On Windows
+   # Windows
    venv\Scripts\activate
 
-   # On macOS/Linux
+   # macOS/Linux
    source venv/bin/activate
    ```
 
-3. **Install dependencies**
+3. Install dependencies
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Configure environment variables**
-
-   Create a `.env` file in the `backend/` directory:
+4. Create `.env` file in `backend/` directory:
    ```env
    # Supabase Configuration
    SUPABASE_URL=https://vnznhsbjqxufvhasotid.supabase.co
@@ -301,229 +242,140 @@ The platform runs automated background processes in production:
    ALERT_RECIPIENTS=manager@example.com,admin@example.com
    ```
 
-5. **Set up database**
+5. Set up database
+   - Go to https://supabase.com and create a project
+   - Open Supabase SQL Editor
+   - Copy contents from `backend/database/schema.sql`
+   - Paste and execute to create tables
+   - Go to Settings → API and copy your keys
+   - Add keys to `.env` file
 
-   Run the database schema script in Supabase SQL Editor:
-   ```bash
-   # Copy contents of backend/database/schema.sql
-   # Paste into Supabase SQL Editor
-   # Execute to create all tables
-   ```
-
-6. **Run the backend server**
+6. Run the backend
    ```bash
    uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
    ```
 
-   The API will be available at: `http://localhost:8080`
+   API at: http://localhost:8080
+   Docs at: http://localhost:8080/docs
 
-   API documentation (Swagger UI): `http://localhost:8080/docs`
+### Frontend Setup
 
-### Frontend Installation
-
-1. **Navigate to frontend directory**
+1. Navigate to frontend
    ```bash
    cd ../frontend
    ```
 
-2. **Install dependencies**
+2. Install dependencies
    ```bash
    npm install
    ```
 
-3. **Configure environment variables**
-
-   Create a `.env` file in the `frontend/` directory:
+3. Create `.env` file in `frontend/` directory:
    ```env
    VITE_API_URL=http://localhost:8080
    ```
 
-4. **Run the development server**
+4. Run dev server
    ```bash
    npm run dev
    ```
 
-   The frontend will be available at: `http://localhost:5173`
-
-### Database Setup (Supabase)
-
-1. **Create a Supabase project** at https://supabase.com
-
-2. **Run database migrations**
-   ```bash
-   # In Supabase SQL Editor, execute:
-   # - backend/database/schema.sql (creates all tables)
-   ```
-
-3. **Enable Row Level Security (RLS)**
-   ```sql
-   -- Run these commands in Supabase SQL Editor
-   ALTER TABLE air_quality_measurements ENABLE ROW LEVEL SECURITY;
-   ALTER TABLE weather_data ENABLE ROW LEVEL SECURITY;
-   ALTER TABLE predictions ENABLE ROW LEVEL SECURITY;
-   ALTER TABLE alerts ENABLE ROW LEVEL SECURITY;
-   ALTER TABLE sensor_metadata ENABLE ROW LEVEL SECURITY;
-
-   -- Create policies (example for public read access)
-   CREATE POLICY "Public read access" ON air_quality_measurements
-   FOR SELECT USING (true);
-   ```
-
-4. **Get your API keys**
-   - Go to Settings → API in your Supabase dashboard
-   - Copy the `anon` key and `service_role` key
-   - Add them to your backend `.env` file
+   Frontend at: http://localhost:5173
 
 ---
 
 ## Usage
 
-### Starting the Application
+### Starting the App
 
-#### Development Mode
+Development mode:
 
-1. **Start backend** (Terminal 1):
+1. Start backend (Terminal 1):
    ```bash
    cd backend
-   source venv/bin/activate  # or venv\Scripts\activate on Windows
+   source venv/bin/activate  # Windows: venv\Scripts\activate
    uvicorn app.main:app --reload --port 8080
    ```
 
-2. **Start frontend** (Terminal 2):
+2. Start frontend (Terminal 2):
    ```bash
    cd frontend
    npm run dev
    ```
 
-3. **Start IoT sensors** (Terminal 3, optional):
+3. Start IoT sensors (Terminal 3, optional):
    ```bash
    cd backend
    python app/simulators/iot_sensor.py
    ```
 
-#### Production Mode
+### Access Points
 
-See [Deployment](#deployment) section below.
+- Frontend: http://localhost:5173
+- Backend: http://localhost:8080
+- API Docs: http://localhost:8080/docs
+- Health: http://localhost:8080/health
 
-### Accessing the Application
+### How to Use
 
-- **Frontend:** http://localhost:5173
-- **Backend API:** http://localhost:8080
-- **API Documentation:** http://localhost:8080/docs
-- **Health Check:** http://localhost:8080/health
-
-### User Workflows
-
-#### 1. Viewing Current Air Quality
-
-1. Navigate to the **Dashboard** page (home)
-2. View real-time KPI cards for PM2.5, PM10, NO2
-3. Check the air quality trend chart
-4. View recent anomalies widget
-
-#### 2. Exploring Interactive Maps
-
-1. Navigate to **Carte Interactive** (Map page)
-2. Toggle layers:
-   - Pollution heatmap
-   - IoT sensor locations
-   - Vélib stations
-   - Traffic disruptions
-   - Transit stops
-3. Click markers for detailed information
-4. Zoom/pan to explore different areas
-
-#### 3. Viewing Predictions
-
-1. Navigate to **Prédictions** page
-2. See J+1 (24-hour) PM2.5 forecast
-3. View confidence scores
-4. Compare predicted vs. historical values
-5. Analyze prediction accuracy metrics
-
-#### 4. Mobility Data
-
-1. Navigate to **Mobilité** page
-2. View Vélib station availability
-3. Check traffic disruptions by severity
-4. See real-time transit departures
-5. Analyze mobility patterns
-
-#### 5. Advanced Analytics
-
-1. Navigate to **Analyses** page
-2. View pollution-weather correlations
-3. Analyze temporal patterns
-4. Examine statistical distributions
-5. Customize time ranges
-
-#### 6. Generating Reports
-
-1. Navigate to **Rapports** page
-2. Select date range
-3. Choose report type (summary, detailed)
-4. Click "Generate PDF Report"
-5. Download the generated PDF
+1. Dashboard - View current PM2.5, PM10, NO2 levels and trends
+2. Map - Toggle pollution heatmap, sensors, Vélib stations, traffic, transit
+3. Predictions - See 24-hour PM2.5 forecasts with confidence scores
+4. Mobility - Check Vélib availability, traffic disruptions, transit times
+5. Analytics - Analyze pollution-weather correlation and patterns (login required)
+6. Reports - Generate PDF reports for custom date ranges (login required)
 
 ---
 
 ## IoT Sensors
 
-### Sensor Network
+### Sensor Locations
 
-The platform includes **5 IoT air quality sensors** strategically placed across Paris:
+5 sensors placed across Paris:
 
-| Sensor ID | Location | Coordinates | Pollutants Measured |
-|-----------|----------|-------------|---------------------|
-| SENSOR_001 | Paris Centre | 48.8566°N, 2.3522°E | PM2.5, PM10, NO2 |
-| SENSOR_002 | Paris Nord | 48.8738°N, 2.2950°E | PM2.5, PM10, NO2 |
-| SENSOR_003 | Paris Sud | 48.8414°N, 2.3209°E | PM2.5, PM10, NO2 |
-| SENSOR_004 | Paris Est | 48.8467°N, 2.3775°E | PM2.5, PM10, NO2 |
-| SENSOR_005 | Paris Ouest | 48.8656°N, 2.2879°E | PM2.5, PM10, NO2 |
+- SENSOR_001 - Paris Centre (48.8566°N, 2.3522°E)
+- SENSOR_002 - Paris Nord (48.8738°N, 2.2950°E)
+- SENSOR_003 - Paris Sud (48.8414°N, 2.3209°E)
+- SENSOR_004 - Paris Est (48.8467°N, 2.3775°E)
+- SENSOR_005 - Paris Ouest (48.8656°N, 2.2879°E)
+
+All measure: PM2.5, PM10, NO2
 
 ### Data Collection
 
-- **Measurement Interval:** 15 minutes (900 seconds)
-- **Data Points per Day:** 96 measurements per sensor
-- **Total Daily Readings:** 480 measurements (5 sensors × 96)
-- **Data Transmission:** HTTP POST to `/api/v1/air-quality/measurements`
+- Measurement every 15 minutes
+- 96 readings per sensor per day
+- 480 total daily readings (5 sensors × 96)
+- Sends via HTTP POST to `/api/v1/air-quality/measurements`
 
-### Sensor Simulation
+### Simulation
 
-The IoT sensors are simulated with realistic behavior:
+Sensors are simulated with realistic patterns:
+- Daily cycles (peaks during rush hours 7-9am, 5-7pm)
+- Random noise (±10%)
+- Occasional spikes (5% chance, 1.5-2x multiplier)
+- Gradual drift over time
 
-```python
-# Realistic PM2.5 generation with:
-# - Daily cycles (higher during rush hours 7-9am, 5-7pm)
-# - Random noise (±10%)
-# - Occasional spikes (5% probability, 1.5-2x multiplier)
-# - Gradual drift (baseline changes over time)
-```
-
-**Starting the simulator:**
+Run simulator:
 ```bash
 cd backend
 python app/simulators/iot_sensor.py
 ```
 
-The simulator automatically:
-- Registers sensors in the `sensor_metadata` table
-- Sends measurements every 15 minutes
-- Logs successful transmissions
-- Handles API errors gracefully
+Auto-registers sensors, sends data every 15 min, logs transmissions.
 
 ---
 
 ## API Documentation
 
-### Base URL
+### Base URLs
 
-- **Development:** `http://localhost:8080`
-- **Production:** `https://smartcity-platform-production.up.railway.app`
+- Development: http://localhost:8080
+- Production: https://smartcity-platform-production.up.railway.app
 
 ### Authentication
 
-Most endpoints require JWT authentication via Supabase Auth:
+Some endpoints need JWT auth via Supabase:
 
 ```bash
 # 1. Register new user
@@ -588,282 +440,90 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-#### Supabase Authentication Configuration
+#### Supabase Setup for Production
 
-**IMPORTANT:** Before using authentication in production, configure Supabase redirect URLs:
+Before deploying, configure Supabase:
 
-1. **Access Supabase Dashboard:**
-   - Go to https://supabase.com/dashboard
-   - Select your Smart City project
-   - Navigate to: **Authentication** → **URL Configuration**
+1. Go to https://supabase.com/dashboard
+2. Select your project → Authentication → URL Configuration
+3. Set Site URL: `https://frontend-gamma-three-19.vercel.app`
+4. Add Redirect URLs:
+   - `https://frontend-gamma-three-19.vercel.app/**`
+   - `https://frontend-gamma-three-19.vercel.app/login`
+   - `http://localhost:3000/**`
+5. Enable email verification: Authentication → Providers → Email → Confirm email
+6. Users must verify email before login works
 
-2. **Configure Redirect URLs:**
+### Main Endpoints
 
-   **Site URL:**
-   ```
-   https://frontend-gamma-three-19.vercel.app
-   ```
+Air Quality:
+- `GET /api/v1/air-quality/current?city=paris` - current readings
+- `GET /api/v1/air-quality/history?city=paris&limit=100` - historical data
+- `POST /api/v1/air-quality/measurements` - create measurement (sensors)
 
-   **Redirect URLs (Additional):**
-   ```
-   https://frontend-gamma-three-19.vercel.app/**
-   https://frontend-gamma-three-19.vercel.app/login
-   http://localhost:3000/**
-   ```
+Predictions:
+- `GET /api/v1/predictions/current?city=paris` - next 24h forecast
+- `GET /api/v1/predictions/history?city=paris&days=7` - past predictions
+- `POST /api/v1/predictions/train` - retrain model
 
-   This ensures:
-   - ✅ Email verification links redirect to production frontend
-   - ✅ Password reset links work correctly
-   - ✅ OAuth callbacks function properly
-   - ✅ Development environment (localhost:3000) still works
+Mobility:
+- `GET /api/v1/mobility/velib?limit=50` - Vélib stations
+- `GET /api/v1/mobility/traffic-disruptions?severity=high` - traffic issues
+- `GET /api/v1/mobility/transit-stops?limit=50` - transit stops
+- `GET /api/v1/mobility/next-departures?stop_id=STIF:StopPoint:Q:41322:` - departures
 
-3. **Email Verification Settings:**
-   - Navigate to: **Authentication** → **Providers** → **Email**
-   - **Enable "Confirm email"** for production security
-   - Users must verify their email before they can login
-   - Registration returns empty `access_token` until email is verified
-   - Login fails with "Invalid credentials" until email is verified
+Analytics:
+- `GET /api/v1/analytics/pollution-weather-correlation?city=paris&days=30`
+- `GET /api/v1/analytics/temporal-analysis?city=paris&days=7`
+- `GET /api/v1/analytics/statistics?city=paris&days=30`
 
-4. **Testing Authentication Flow:**
-   ```bash
-   # 1. Register new user
-   POST /api/v1/auth/register
-   # Response: user created, access_token="" (empty)
+Alerts:
+- `GET /api/v1/alerts/active` - active alerts
+- `POST /api/v1/alerts` - create alert
+- `PATCH /api/v1/alerts/{id}/acknowledge` - acknowledge alert
 
-   # 2. Check email inbox for verification link
-   # Click link → redirects to https://frontend-gamma-three-19.vercel.app
+Reports:
+- `POST /api/v1/reports/generate` - generate PDF
 
-   # 3. Login after verification
-   POST /api/v1/auth/login
-   # Response: user authenticated, access_token="eyJhbGci..." (valid JWT)
-   ```
-
-### Core Endpoints
-
-#### Air Quality
-
-```bash
-# Get current air quality
-GET /api/v1/air-quality/current?city=paris
-
-# Get historical data
-GET /api/v1/air-quality/history?city=paris&limit=100
-
-# Create measurement (IoT sensors)
-POST /api/v1/air-quality/measurements
-Content-Type: application/json
-
-{
-  "source": "SENSOR_001",
-  "city": "paris",
-  "pm25": 25.5,
-  "pm10": 38.2,
-  "no2": 18.7,
-  "timestamp": "2025-12-30T10:30:00Z"
-}
-```
-
-#### Predictions
-
-```bash
-# Get J+1 prediction
-GET /api/v1/predictions/current?city=paris
-
-# Get prediction history
-GET /api/v1/predictions/history?city=paris&days=7
-
-# Manually trigger training
-POST /api/v1/predictions/train
-{
-  "city": "paris",
-  "days": 60
-}
-```
-
-#### Mobility
-
-```bash
-# Get Vélib station availability
-GET /api/v1/mobility/velib?limit=50
-
-# Get traffic disruptions
-GET /api/v1/mobility/traffic-disruptions?severity=high&active_only=true
-
-# Get transit stops
-GET /api/v1/mobility/transit-stops?limit=50
-
-# Get next departures
-GET /api/v1/mobility/next-departures?stop_id=STIF:StopPoint:Q:41322:
-```
-
-#### Analytics
-
-```bash
-# Get pollution-weather correlation
-GET /api/v1/analytics/pollution-weather-correlation?city=paris&days=30
-
-# Get temporal analysis
-GET /api/v1/analytics/temporal-analysis?city=paris&days=7
-
-# Get statistics
-GET /api/v1/analytics/statistics?city=paris&days=30
-```
-
-#### Alerts
-
-```bash
-# Get active alerts
-GET /api/v1/alerts/active
-
-# Create alert
-POST /api/v1/alerts
-{
-  "alert_type": "threshold_exceeded",
-  "severity": "high",
-  "city": "paris",
-  "pollutant": "PM2.5",
-  "value": 55.2,
-  "threshold": 50.0,
-  "message": "PM2.5 exceeded WHO guideline"
-}
-
-# Acknowledge alert
-PATCH /api/v1/alerts/{alert_id}/acknowledge
-```
-
-#### Reports
-
-```bash
-# Generate PDF report
-POST /api/v1/reports/generate
-{
-  "city": "paris",
-  "start_date": "2025-12-01",
-  "end_date": "2025-12-30",
-  "report_type": "summary"
-}
-
-# Response: PDF file download
-```
-
-### Response Formats
-
-All responses follow this structure:
-
-**Success (200 OK):**
-```json
-{
-  "id": 12345,
-  "city": "paris",
-  "pm25": 25.5,
-  "pm10": 38.2,
-  "timestamp": "2025-12-30T10:30:00Z"
-}
-```
-
-**Error (4xx/5xx):**
-```json
-{
-  "detail": "City not found"
-}
-```
-
-### Rate Limiting
-
-- **Public endpoints:** 100 requests/minute
-- **Authenticated endpoints:** 1000 requests/minute
-- **ML training endpoints:** 10 requests/hour
+Full docs: http://localhost:8080/docs
 
 ---
 
 ## Deployment
 
-### Backend Deployment (Railway)
+### Backend (Railway)
 
-1. **Create Railway account** at https://railway.app
+1. Create account at https://railway.app
+2. Create new project: `railway init`
+3. Add environment variables in Railway dashboard
+4. Deploy: `railway up`
+5. Get URL: https://smartcity-platform-production.up.railway.app
 
-2. **Create new project**
-   ```bash
-   railway init
-   ```
+### Frontend (Vercel)
 
-3. **Add environment variables** in Railway dashboard:
-   ```
-   SUPABASE_URL=https://vnznhsbjqxufvhasotid.supabase.co
-   SUPABASE_KEY=your_key
-   SUPABASE_SERVICE_KEY=your_service_key
-   SECRET_KEY=your_secret_key
-   ENVIRONMENT=production
-   PORT=8080
-   ALLOWED_ORIGINS=https://frontend-gamma-three-19.vercel.app
-   IDFM_API_KEY=your_idfm_key
-   ```
-
-4. **Deploy**
-   ```bash
-   railway up
-   ```
-
-5. **Get deployment URL**
-   ```
-   https://smartcity-platform-production.up.railway.app
-   ```
-
-### Frontend Deployment (Vercel)
-
-1. **Install Vercel CLI**
-   ```bash
-   npm install -g vercel
-   ```
-
-2. **Deploy**
-   ```bash
-   cd frontend
-   vercel
-   ```
-
-3. **Configure environment variables** in Vercel dashboard:
-   ```
-   VITE_API_URL=https://smartcity-platform-production.up.railway.app
-   ```
-
-4. **Production URL**
-   ```
-   https://frontend-gamma-three-19.vercel.app
-   ```
-
-5. **Configure Supabase Redirect URLs** (IMPORTANT):
-   - After deploying frontend, update Supabase Authentication settings
-   - Go to: **Authentication** → **URL Configuration** in Supabase Dashboard
-   - Set **Site URL** to your Vercel deployment URL
-   - Add Vercel URL to **Redirect URLs** list
-   - See [Supabase Authentication Configuration](#supabase-authentication-configuration) section for details
+1. Install CLI: `npm install -g vercel`
+2. Deploy: `cd frontend && vercel`
+3. Add env var `VITE_API_URL` in Vercel dashboard
+4. Get URL: https://frontend-gamma-three-19.vercel.app
+5. Update Supabase redirect URLs (see Authentication section)
 
 ### Database (Supabase)
 
-Supabase is already cloud-hosted, no deployment needed. Just ensure:
-
-- RLS policies are enabled
-- Indexes are created
-- Backups are configured
+Already cloud-hosted. Just enable RLS policies and create indexes.
 
 ---
 
 ## Production URLs
 
-### Live Application
+Live app:
+- Frontend: https://frontend-gamma-three-19.vercel.app
+- Backend: https://smartcity-platform-production.up.railway.app
+- API Docs: https://smartcity-platform-production.up.railway.app/docs
+- Health: https://smartcity-platform-production.up.railway.app/health
 
-- **Frontend:** https://frontend-gamma-three-19.vercel.app
-- **Backend API:** https://smartcity-platform-production.up.railway.app
-- **API Docs:** https://smartcity-platform-production.up.railway.app/docs
-- **Health Check:** https://smartcity-platform-production.up.railway.app/health
-
-### Demo Credentials
-
-```
-Email: demo@smartcity.com
-Password: Demo2025!
-```
+Demo login:
+- Email: demo@smartcity.com
+- Password: Demo2024!
 
 ---
 
@@ -948,131 +608,81 @@ smartcity/
 
 ## Performance
 
-### Benchmarks
+- API response: < 200ms
+- Dashboard load: < 2 seconds
+- Database queries: < 50ms
+- ML predictions: < 500ms
+- PDF generation: < 3 seconds
 
-- **API Response Time:** < 200ms (95th percentile)
-- **Dashboard Load:** < 2 seconds
-- **Database Queries:** < 50ms average
-- **ML Predictions:** < 500ms
-- **PDF Generation:** < 3 seconds
-
-### Optimization Strategies
-
-- **Database:** Indexed on `city`, `timestamp`, `source` columns
-- **Caching:** TanStack Query with 5-minute stale time
-- **Lazy Loading:** Code splitting with React.lazy()
-- **CDN:** Static assets served via Vercel Edge Network
-- **Compression:** Gzip/Brotli enabled
+Optimizations:
+- Database indexes on city, timestamp, source
+- TanStack Query caching (5min stale time)
+- React.lazy() code splitting
+- Vercel Edge CDN
+- Gzip/Brotli compression
 
 ---
 
 ## Security
 
-### Authentication
-- JWT tokens with HS256 algorithm
-- Token expiration: 60 minutes
-- Refresh token support
-
-### Data Protection
-- Row Level Security (RLS) enabled on all tables
-- Input validation with Pydantic
+- JWT tokens (HS256, 60min expiry)
+- Row Level Security on database
+- Pydantic input validation
 - SQL injection prevention
-- XSS protection via React's automatic escaping
-
-### HTTPS
-- All production traffic encrypted
-- Certificate management via Railway/Vercel
-
-### API Keys
-- Never committed to version control
-- Stored in environment variables
-- Rotated regularly
+- XSS protection
+- HTTPS everywhere
+- Environment variables for secrets
 
 ---
 
 ## Monitoring
 
-### Application Monitoring
-- Health check endpoint: `/health`
-- Logging with structured JSON format
-- Error tracking
-
-### Database Monitoring
-- Supabase dashboard for query performance
-- Connection pool monitoring
-
-### Alerts
-- Email notifications for critical errors
-- Threshold breach alerts
+- Health check: `/health`
+- JSON logging
+- Supabase dashboard for queries
+- Email alerts for errors and threshold breaches
 - Sensor offline detection
 
 ---
 
 ## Contributing
 
-### Development Workflow
+1. Fork the repo
+2. Create feature branch: `git checkout -b feature/name`
+3. Commit changes: `git commit -m "Add feature"`
+4. Push: `git push origin feature/name`
+5. Create Pull Request
 
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. **Make changes and commit**
-   ```bash
-   git commit -m "Add: feature description"
-   ```
-4. **Push to your fork**
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. **Create Pull Request**
+Code standards:
+- Backend: PEP 8, type hints, docstrings
+- Frontend: TypeScript strict mode
+- Write tests for new features
 
-### Code Standards
-
-- **Backend:** Follow PEP 8, use type hints, write docstrings
-- **Frontend:** Use TypeScript strict mode, follow React best practices
-- **Testing:** Write tests for new features
-- **Documentation:** Update README and technical docs
-
-### Running Tests
-
+Run tests:
 ```bash
-# Backend tests
-cd backend
-pytest
+# Backend
+cd backend && pytest
 
-# Frontend tests
-cd frontend
-npm test
+# Frontend
+cd frontend && npm test
 ```
 
 ---
 
 ## License
 
-MIT License - see LICENSE file for details
+MIT License
 
 ---
 
-## Support
+## Credits
 
-For issues, questions, or contributions:
-
-- **GitHub Issues:** https://github.com/yourusername/smartcity/issues
-- **Documentation:** See `docs/` folder
-- **Email:** support@smartcity.com
-
----
-
-## Acknowledgments
-
-- **Île-de-France Mobilités (IDFM)** for mobility APIs
-- **Supabase** for database and authentication
-- **FastAPI** and **React** communities
-- **ESIS-2 Team** for development
+- Île-de-France Mobilités (IDFM) - mobility APIs
+- Supabase - database and auth
+- FastAPI and React communities
+- ESIS-2 Team
 
 ---
 
-**Last Updated:** 2025-12-30
+**Built:** December 18-31, 2024
 **Version:** 1.0.0
-**Status:** Production
