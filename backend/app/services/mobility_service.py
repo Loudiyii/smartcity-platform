@@ -75,7 +75,10 @@ class MobilityService:
 
                         if application_periods:
                             from datetime import timezone
-                            now = datetime.now(timezone.utc)
+                            from zoneinfo import ZoneInfo
+                            # Use Paris timezone since IDFM API returns local French time
+                            paris_tz = ZoneInfo("Europe/Paris")
+                            now = datetime.now(paris_tz)
                             for period in application_periods:
                                 try:
                                     begin_str = period.get('begin')
@@ -84,16 +87,16 @@ class MobilityService:
                                     if begin_str:
                                         # Parse ISO datetime and ensure it's timezone-aware
                                         begin = datetime.fromisoformat(begin_str.replace('Z', '+00:00'))
-                                        # Force timezone to UTC if naive
+                                        # Force timezone to Paris if naive (IDFM uses local French time)
                                         if begin.tzinfo is None:
-                                            begin = begin.replace(tzinfo=timezone.utc)
+                                            begin = begin.replace(tzinfo=paris_tz)
 
                                         # Check if period is currently active
                                         if end_str:
                                             end = datetime.fromisoformat(end_str.replace('Z', '+00:00'))
-                                            # Force timezone to UTC if naive
+                                            # Force timezone to Paris if naive
                                             if end.tzinfo is None:
-                                                end = end.replace(tzinfo=timezone.utc)
+                                                end = end.replace(tzinfo=paris_tz)
                                             # Active if: begin <= now <= end
                                             if begin <= now <= end:
                                                 is_active = True
