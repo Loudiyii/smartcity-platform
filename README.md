@@ -31,7 +31,7 @@ Cette plateforme surveille la qualité de l'air à Paris et prédit les niveaux 
 - Stations Vélib, perturbations de trafic et informations de transport
 - Génération de rapports PDF
 
-Construit entre le 18 et le 31 décembre 2024 comme projet étudiant.
+Construit entre le 18 et le 31 décembre 2025 comme projet étudiant.
 
 ---
 
