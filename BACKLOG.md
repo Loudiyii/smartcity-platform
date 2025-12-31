@@ -1,535 +1,535 @@
-# Smart City Platform - Product Backlog
+# Plateforme Smart City - Backlog Produit
 
-## Project Overview
+## Aperçu du Projet
 
-**Project:** Smart City Platform - Air Quality & Mobility Monitoring
-**Period:** Sprint 1-2 (MVP functional)
-**Team:** ESIS-2 Team
-**Product Owner:** Marie Dubois (Environmental Manager persona)
+**Projet:** Plateforme Smart City - Surveillance de la Qualité de l'Air & Mobilité
+**Période:** Sprint 1-2 (MVP fonctionnel)
+**Équipe:** Équipe ESIS-2
+**Product Owner:** Marie Dubois (persona Responsable Environnement)
 
-**Goal:** Real-time platform for air quality and urban mobility monitoring with ML predictions and advanced analytics.
+**Objectif:** Plateforme temps réel pour la surveillance de la qualité de l'air et de la mobilité urbaine avec prédictions ML et analyses avancées.
 
 ---
 
-## Sprints Overview
+## Vue d'Ensemble des Sprints
 
-| Sprint | Dates | Objective | Status |
+| Sprint | Dates | Objectif | Statut |
 |--------|-------|-----------|--------|
-| Sprint 0 | Dec 18, 2024 | Infrastructure & architecture setup | Completed |
-| Sprint 1 | Dec 19-23, 2024 | MVP - Data collection & basic dashboard | Completed |
-| Sprint 2 | Dec 24-28, 2024 | Advanced features - ML, maps, auth | Completed |
-| Sprint 3 | Dec 29-31, 2024 | Polish, optimization, deployment | Completed |
+| Sprint 0 | 18 déc. 2024 | Infrastructure & mise en place architecture | Terminé |
+| Sprint 1 | 19-23 déc. 2024 | MVP - Collecte données & tableau de bord basique | Terminé |
+| Sprint 2 | 24-28 déc. 2024 | Fonctionnalités avancées - ML, cartes, auth | Terminé |
+| Sprint 3 | 29-31 déc. 2024 | Polish, optimisation, déploiement | Terminé |
 
 ---
 
-## Sprint 1 - MVP (COMPLETED)
+## Sprint 1 - MVP (TERMINÉ)
 
-### Epic 1: Infrastructure & Data Collection
+### Epic 1: Infrastructure & Collecte de Données
 
-#### US-001: Backend infrastructure setup
-**As a** developer
-**I want** to have a deployed FastAPI API
-**So that** I can collect and serve data
+#### US-001: Mise en place infrastructure backend
+**En tant que** développeur
+**Je veux** avoir une API FastAPI déployée
+**Afin de** pouvoir collecter et servir des données
 
-**Acceptance criteria:**
-- [x] FastAPI operational
-- [x] Supabase database configured
-- [x] Tables created (air_quality_measurements, weather_data, sensor_metadata)
-- [x] Deployed on Railway
+**Critères d'acceptation:**
+- [x] FastAPI opérationnel
+- [x] Base de données Supabase configurée
+- [x] Tables créées (air_quality_measurements, weather_data, sensor_metadata)
+- [x] Déployé sur Railway
 
 **Story points:** 5
-**Status:** Completed
-**Deploy URL:** https://smartcity-platform-production.up.railway.app
+**Statut:** Terminé
+**URL de déploiement:** https://smartcity-platform-production.up.railway.app
 
 ---
 
-#### US-002: Data collection from external APIs
-**As a** system
-**I want** to automatically collect AQICN and OpenWeatherMap data
-**So that** we have real-time data
+#### US-002: Collecte de données depuis APIs externes
+**En tant que** système
+**Je veux** collecter automatiquement les données AQICN et OpenWeatherMap
+**Afin d'** avoir des données en temps réel
 
-**Acceptance criteria:**
-- [x] AQICN API integration (air quality)
-- [x] OpenWeatherMap API integration (weather)
-- [x] Automatic collection every hour
-- [x] Storage in Supabase
-- [x] 7+ days of historical data available
+**Critères d'acceptation:**
+- [x] Intégration API AQICN (qualité de l'air)
+- [x] Intégration API OpenWeatherMap (météo)
+- [x] Collecte automatique toutes les heures
+- [x] Stockage dans Supabase
+- [x] 7+ jours de données historiques disponibles
 
 **Story points:** 8
-**Status:** Completed
-**Data:** 2000+ measurements collected
+**Statut:** Terminé
+**Données:** 2000+ mesures collectées
 
 ---
 
-#### US-003: IoT sensor simulation
-**As a** system
-**I want** to simulate 5 IoT sensors in Paris
-**So that** we have data from multiple measurement points
+#### US-003: Simulation de capteurs IoT
+**En tant que** système
+**Je veux** simuler 5 capteurs IoT dans Paris
+**Afin d'** avoir des données de plusieurs points de mesure
 
-**Acceptance criteria:**
-- [x] 5 simulated sensors (Paris Center, North, South, East, West)
-- [x] Measurements every 15 minutes
-- [x] Realistic data generation (PM2.5, PM10, NO2)
-- [x] Background workers in production
-- [x] Sensor metadata stored
+**Critères d'acceptation:**
+- [x] 5 capteurs simulés (Paris Centre, Nord, Sud, Est, Ouest)
+- [x] Mesures toutes les 15 minutes
+- [x] Génération de données réalistes (PM2.5, PM10, NO2)
+- [x] Workers en arrière-plan en production
+- [x] Métadonnées des capteurs stockées
 
 **Story points:** 5
-**Status:** Completed
-**Active sensors:** 5/5
+**Statut:** Terminé
+**Capteurs actifs:** 5/5
 
 ---
 
-### Epic 2: Dashboard & Visualization
+### Epic 2: Tableau de Bord & Visualisation
 
-#### US-004: Real-time dashboard
-**As a** user
-**I want** to see a dashboard with current data
-**So that** I know the air quality in real-time
+#### US-004: Tableau de bord temps réel
+**En tant qu'** utilisateur
+**Je veux** voir un tableau de bord avec les données actuelles
+**Afin de** connaître la qualité de l'air en temps réel
 
-**Acceptance criteria:**
-- [x] KPI cards (PM2.5, PM10, NO2)
-- [x] Color-coded indicators based on thresholds (green/orange/red)
-- [x] React frontend deployed
-- [x] Responsive design
-- [x] Auto-refreshed data
+**Critères d'acceptation:**
+- [x] Cartes KPI (PM2.5, PM10, NO2)
+- [x] Indicateurs colorés basés sur les seuils (vert/orange/rouge)
+- [x] Frontend React déployé
+- [x] Design responsive
+- [x] Données auto-rafraîchies
 
 **Story points:** 8
-**Status:** Completed
+**Statut:** Terminé
 **URL:** https://frontend-gamma-three-19.vercel.app
 
 ---
 
-#### US-005: Historical charts
-**As a** user
-**I want** to see pollution evolution over 7 days
-**So that** I can analyze trends
+#### US-005: Graphiques historiques
+**En tant qu'** utilisateur
+**Je veux** voir l'évolution de la pollution sur 7 jours
+**Afin d'** analyser les tendances
 
-**Acceptance criteria:**
-- [x] Chart.js integrated
-- [x] Line chart for PM2.5, PM10, NO2
-- [x] Period selection (7/14/30 days)
-- [x] Tooltip with details
+**Critères d'acceptation:**
+- [x] Chart.js intégré
+- [x] Graphique en ligne pour PM2.5, PM10, NO2
+- [x] Sélection de période (7/14/30 jours)
+- [x] Tooltip avec détails
 - [x] Export possible
 
 **Story points:** 5
-**Status:** Completed
+**Statut:** Terminé
 
 ---
 
-## Sprint 2 - Advanced Features (COMPLETED)
+## Sprint 2 - Fonctionnalités Avancées (TERMINÉ)
 
-### Epic 3: Machine Learning & Predictions
+### Epic 3: Machine Learning & Prédictions
 
-#### US-006: Prediction model training
-**As a** data scientist
-**I want** to train a Random Forest model
-**So that** I can predict pollution D+1
+#### US-006: Entraînement du modèle de prédiction
+**En tant que** data scientist
+**Je veux** entraîner un modèle Random Forest
+**Afin de** pouvoir prédire la pollution J+1
 
-**Acceptance criteria:**
-- [x] Random Forest model implemented
-- [x] Feature engineering (7-day rolling stats, temporal features)
+**Critères d'acceptation:**
+- [x] Modèle Random Forest implémenté
+- [x] Feature engineering (stats rolling 7 jours, features temporelles)
 - [x] R² > 0.7
 - [x] MAPE < 30%
-- [x] Auto-training at startup if model absent
-- [x] Model save (.pkl)
+- [x] Auto-entraînement au démarrage si modèle absent
+- [x] Sauvegarde du modèle (.pkl)
 
 **Story points:** 13
-**Status:** Completed
+**Statut:** Terminé
 **Performance:** R²=0.82, MAPE=18.5%
 
 ---
 
-#### US-007: D+1 predictions display
-**As a** user
-**I want** to see pollution predictions for tomorrow
-**So that** I can plan my activities
+#### US-007: Affichage des prédictions J+1
+**En tant qu'** utilisateur
+**Je veux** voir les prédictions de pollution pour demain
+**Afin de** planifier mes activités
 
-**Acceptance criteria:**
-- [x] Dedicated page "/predictions"
-- [x] PM2.5 prediction for D+1
-- [x] Confidence interval displayed
-- [x] Predicted AQI level
-- [x] Recommendations based on level
-- [x] Model confidence score
+**Critères d'acceptation:**
+- [x] Page dédiée "/predictions"
+- [x] Prédiction PM2.5 pour J+1
+- [x] Intervalle de confiance affiché
+- [x] Niveau AQI prédit
+- [x] Recommandations basées sur le niveau
+- [x] Score de confiance du modèle
 
 **Story points:** 8
-**Status:** Completed
+**Statut:** Terminé
 
 ---
 
-### Epic 4: Urban Mobility (IDFM)
+### Epic 4: Mobilité Urbaine (IDFM)
 
-#### US-008: Velib data integration
-**As a** user
-**I want** to see Velib station availability
-**So that** I can plan my trips
+#### US-008: Intégration des données Velib
+**En tant qu'** utilisateur
+**Je veux** voir la disponibilité des stations Velib
+**Afin de** planifier mes déplacements
 
-**Acceptance criteria:**
-- [x] Real-time Velib API integration
-- [x] 1000+ stations displayed
-- [x] Number of available bikes
-- [x] Number of available docks
-- [x] Availability rate calculated
-- [x] Auto-refresh
+**Critères d'acceptation:**
+- [x] Intégration API Velib temps réel
+- [x] 1000+ stations affichées
+- [x] Nombre de vélos disponibles
+- [x] Nombre de bornes disponibles
+- [x] Taux de disponibilité calculé
+- [x] Auto-rafraîchissement
 
 **Story points:** 5
-**Status:** Completed
+**Statut:** Terminé
 **Stations:** 1400+ stations
 
 ---
 
-#### US-009: IDFM traffic alerts
-**As a** user
-**I want** to see traffic disruptions
-**So that** I can avoid problem areas
+#### US-009: Alertes trafic IDFM
+**En tant qu'** utilisateur
+**Je veux** voir les perturbations du trafic
+**Afin d'** éviter les zones à problèmes
 
-**Acceptance criteria:**
-- [x] IDFM General Messages API integration
-- [x] Parsing of 577 active alerts
-- [x] Custom datetime parser for IDFM format
-- [x] Filtering by severity (information, medium, high, critical)
-- [x] Real-time display on dashboard
-- [x] Icons based on disruption type
+**Critères d'acceptation:**
+- [x] Intégration API IDFM General Messages
+- [x] Parsing de 577 alertes actives
+- [x] Parser datetime personnalisé pour format IDFM
+- [x] Filtrage par sévérité (information, medium, high, critical)
+- [x] Affichage temps réel sur le tableau de bord
+- [x] Icônes basées sur le type de perturbation
 
 **Story points:** 8
-**Status:** Completed
-**Fix applied:** Custom datetime parser (20241229T075200 to ISO)
+**Statut:** Terminé
+**Correctif appliqué:** Parser datetime personnalisé (20241229T075200 vers ISO)
 
 ---
 
-#### US-010: Interactive multi-layer map
-**As a** user
-**I want** to see a map with sensors, Velib and traffic
-**So that** I have a global view of the city
+#### US-010: Carte interactive multi-couches
+**En tant qu'** utilisateur
+**Je veux** voir une carte avec capteurs, Velib et trafic
+**Afin d'** avoir une vue globale de la ville
 
-**Acceptance criteria:**
-- [x] Interactive Leaflet map
-- [x] IoT sensors layer with popup
-- [x] Velib stations layer with availability
-- [x] Pollution heatmap layer
-- [x] Traffic alerts layer
-- [x] Layer controls
-- [x] Zoom/Pan/Clickable markers
+**Critères d'acceptation:**
+- [x] Carte interactive Leaflet
+- [x] Couche capteurs IoT avec popup
+- [x] Couche stations Velib avec disponibilité
+- [x] Couche heatmap pollution
+- [x] Couche alertes trafic
+- [x] Contrôles de couches
+- [x] Zoom/Pan/Marqueurs cliquables
 
 **Story points:** 13
-**Status:** Completed
+**Statut:** Terminé
 
 ---
 
-### Epic 5: Anomaly Detection & Alerts
+### Epic 5: Détection d'Anomalies & Alertes
 
-#### US-011: Automatic anomaly detection
-**As a** system
-**I want** to automatically detect pollution anomalies
-**So that** users are alerted
+#### US-011: Détection automatique d'anomalies
+**En tant que** système
+**Je veux** détecter automatiquement les anomalies de pollution
+**Afin que** les utilisateurs soient alertés
 
-**Acceptance criteria:**
-- [x] Z-score + Isolation Forest algorithm
-- [x] Background worker every 30 minutes
-- [x] High/critical anomaly detection
-- [x] Auto-save in alerts table
-- [x] Classification by severity
-- [x] Anomaly score calculation
+**Critères d'acceptation:**
+- [x] Algorithme Z-score + Isolation Forest
+- [x] Worker en arrière-plan toutes les 30 minutes
+- [x] Détection anomalies high/critical
+- [x] Auto-sauvegarde dans table alerts
+- [x] Classification par sévérité
+- [x] Calcul du score d'anomalie
 
 **Story points:** 13
-**Status:** Completed
-**Worker:** Active in production (30min intervals)
+**Statut:** Terminé
+**Worker:** Actif en production (intervalles de 30min)
 
 ---
 
-#### US-012: Anomalies display
-**As a** user
-**I want** to see detected anomalies
-**So that** I can understand pollution spikes
+#### US-012: Affichage des anomalies
+**En tant qu'** utilisateur
+**Je veux** voir les anomalies détectées
+**Afin de** comprendre les pics de pollution
 
-**Acceptance criteria:**
-- [x] Anomalies widget on dashboard
-- [x] Recent anomalies list
-- [x] Color-coded badges by severity
-- [x] Details of each anomaly
-- [x] Timestamp and duration
-- [x] Concerned pollutant
+**Critères d'acceptation:**
+- [x] Widget anomalies sur le tableau de bord
+- [x] Liste des anomalies récentes
+- [x] Badges colorés par sévérité
+- [x] Détails de chaque anomalie
+- [x] Timestamp et durée
+- [x] Polluant concerné
 
 **Story points:** 5
-**Status:** Completed
+**Statut:** Terminé
 
 ---
 
-### Epic 6: Authentication & Security
+### Epic 6: Authentification & Sécurité
 
-#### US-013: User authentication
-**As a** user
-**I want** to create an account and login
-**So that** I can access advanced features
+#### US-013: Authentification utilisateur
+**En tant qu'** utilisateur
+**Je veux** créer un compte et me connecter
+**Afin d'** accéder aux fonctionnalités avancées
 
-**Acceptance criteria:**
-- [x] Supabase Auth integration
-- [x] Registration with email/password
-- [x] Email verification (confirmation email)
-- [x] Login with JWT tokens
-- [x] Logout with session cleanup
-- [x] Password reset via email
+**Critères d'acceptation:**
+- [x] Intégration Supabase Auth
+- [x] Inscription avec email/mot de passe
+- [x] Vérification email (email de confirmation)
+- [x] Login avec tokens JWT
+- [x] Logout avec nettoyage de session
+- [x] Réinitialisation mot de passe par email
 
 **Story points:** 8
-**Status:** Completed
-**Tested:** Complete flow verified in production
+**Statut:** Terminé
+**Testé:** Flux complet vérifié en production
 
 ---
 
-#### US-014: Hybrid authentication model
-**As a** product owner
-**I want** public pages for citizens and protected pages for officials
-**So that** we allow open access while securing sensitive data
+#### US-014: Modèle d'authentification hybride
+**En tant que** product owner
+**Je veux** des pages publiques pour les citoyens et des pages protégées pour les officiels
+**Afin de** permettre un accès ouvert tout en sécurisant les données sensibles
 
-**Acceptance criteria:**
-- [x] Public pages: Dashboard, Map, Predictions, Mobility
-- [x] Protected pages: Analytics, Reports, Mobility Impact
-- [x] ProtectedRoute component with redirect
-- [x] Lock icons on protected pages (non-auth)
-- [x] Dynamic header based on auth status
-- [x] Connected user email display
+**Critères d'acceptation:**
+- [x] Pages publiques: Dashboard, Map, Predictions, Mobility
+- [x] Pages protégées: Analytics, Reports, Mobility Impact
+- [x] Composant ProtectedRoute avec redirection
+- [x] Icônes cadenas sur pages protégées (non-auth)
+- [x] Header dynamique basé sur le statut auth
+- [x] Affichage email utilisateur connecté
 
 **Story points:** 8
-**Status:** Completed
+**Statut:** Terminé
 
 ---
 
-### Epic 7: Analytics & Reports
+### Epic 7: Analyses & Rapports
 
-#### US-015: Pollution-weather correlation analysis
-**As an** analyst
-**I want** to see the correlation between pollution and weather
-**So that** I can understand influencing factors
+#### US-015: Analyse de corrélation pollution-météo
+**En tant qu'** analyste
+**Je veux** voir la corrélation entre pollution et météo
+**Afin de** comprendre les facteurs d'influence
 
-**Acceptance criteria:**
-- [x] "/analytics" page (protected)
-- [x] Pearson coefficient calculation
-- [x] Scatter plot pollution vs weather
-- [x] Pollutant selection (PM2.5, PM10, NO2)
-- [x] Weather variable selection (temp, humidity, wind)
-- [x] Coefficient interpretation
+**Critères d'acceptation:**
+- [x] Page "/analytics" (protégée)
+- [x] Calcul du coefficient de Pearson
+- [x] Graphique scatter pollution vs météo
+- [x] Sélection du polluant (PM2.5, PM10, NO2)
+- [x] Sélection de la variable météo (temp, humidité, vent)
+- [x] Interprétation du coefficient
 
 **Story points:** 8
-**Status:** Completed
+**Statut:** Terminé
 
 ---
 
-#### US-016: PDF report generation
-**As a** manager
-**I want** to generate PDF reports
-**So that** I can share analyses with decision-makers
+#### US-016: Génération de rapports PDF
+**En tant que** manager
+**Je veux** générer des rapports PDF
+**Afin de** partager les analyses avec les décideurs
 
-**Acceptance criteria:**
+**Critères d'acceptation:**
 - [x] Endpoint `/api/v1/reports/generate`
-- [x] PDF with charts (matplotlib)
-- [x] Statistics for selected period
-- [x] Base64 or file export
-- [x] Period customization (7/14/30 days)
+- [x] PDF avec graphiques (matplotlib)
+- [x] Statistiques pour la période sélectionnée
+- [x] Export Base64 ou fichier
+- [x] Personnalisation de la période (7/14/30 jours)
 
 **Story points:** 13
-**Status:** Completed
+**Statut:** Terminé
 
 ---
 
-## Sprint 3 - Polish & Deployment (IN PROGRESS)
+## Sprint 3 - Polish & Déploiement (EN COURS)
 
-### Epic 8: Production Deployment
+### Epic 8: Déploiement en Production
 
-#### US-017: Backend deployment on Railway
-**Status:** Completed
+#### US-017: Déploiement backend sur Railway
+**Statut:** Terminé
 **URL:** https://smartcity-platform-production.up.railway.app
 
 ---
 
-#### US-018: Frontend deployment on Vercel
-**Status:** Completed
+#### US-018: Déploiement frontend sur Vercel
+**Statut:** Terminé
 **URL:** https://frontend-gamma-three-19.vercel.app
 
 ---
 
-#### US-019: Supabase configuration for production
-**Status:** Completed
-**Completed tasks:**
-- [x] Redirect URLs configured
-- [x] Email verification enabled
-- [x] RLS policies enabled
-- [x] Complete documentation
+#### US-019: Configuration Supabase pour la production
+**Statut:** Terminé
+**Tâches complétées:**
+- [x] URLs de redirection configurées
+- [x] Vérification email activée
+- [x] Politiques RLS activées
+- [x] Documentation complète
 
 ---
 
-### Epic 9: Documentation & Quality
+### Epic 9: Documentation & Qualité
 
-#### US-020: Complete technical documentation
-**Status:** Completed
-**Files:**
+#### US-020: Documentation technique complète
+**Statut:** Terminé
+**Fichiers:**
 - [x] README.md (33 KB)
 - [x] TECHNICAL.md (41 KB)
 - [x] QUICK_START.md
-- [x] API documentation (Swagger)
+- [x] Documentation API (Swagger)
 
 ---
 
-#### US-021: Application tests
-**Status:** Completed
-**Tests performed:**
-- [x] Authentication test (registration > login > logout)
-- [x] Protected pages test (redirect if non-auth)
-- [x] API endpoints test (Swagger)
-- [x] Automated browser test (Playwright)
-- [x] Anomaly detection worker test
+#### US-021: Tests de l'application
+**Statut:** Terminé
+**Tests effectués:**
+- [x] Test authentification (inscription > login > logout)
+- [x] Test pages protégées (redirection si non-auth)
+- [x] Test endpoints API (Swagger)
+- [x] Test navigateur automatisé (Playwright)
+- [x] Test worker détection anomalies
 
 ---
 
-#### US-022: Repository cleanup
-**Status:** Completed
+#### US-022: Nettoyage du dépôt
+**Statut:** Terminé
 **Actions:**
-- [x] AI traces removal (.claude/)
-- [x] Temporary files removal
-- [x] .gitignore updated
-- [x] SQL files organization
+- [x] Suppression traces AI (.claude/)
+- [x] Suppression fichiers temporaires
+- [x] .gitignore mis à jour
+- [x] Organisation des fichiers SQL
 
 ---
 
-### Epic 10: Final Deliverables
+### Epic 10: Livrables Finaux
 
-#### US-023: Product backlog creation
-**Status:** In progress
-**Tasks:**
-- [x] Create structured BACKLOG.md
-- [ ] Import to Notion
-- [ ] Add screenshots
-- [ ] Share Notion link
+#### US-023: Création du backlog produit
+**Statut:** En cours
+**Tâches:**
+- [x] Créer BACKLOG.md structuré
+- [ ] Importer dans Notion
+- [ ] Ajouter screenshots
+- [ ] Partager lien Notion
 
 **Story points:** 3
 
 ---
 
-#### US-024: Demo PDF report generation
-**Status:** To do
-**Tasks:**
-- [ ] Generate report via API
-- [ ] Include charts and statistics
-- [ ] Save PDF in /docs
-- [ ] Add to repository
+#### US-024: Génération rapport PDF démo
+**Statut:** À faire
+**Tâches:**
+- [ ] Générer rapport via API
+- [ ] Inclure graphiques et statistiques
+- [ ] Sauvegarder PDF dans /docs
+- [ ] Ajouter au dépôt
 
 **Story points:** 5
 
 ---
 
-#### US-025: Final presentation
-**Status:** To do
-**Tasks:**
-- [ ] Create PowerPoint/Markdown slides
-- [ ] Structure: Problem > Solution > Demo > Results
-- [ ] Add application screenshots
-- [ ] Include technical metrics
+#### US-025: Présentation finale
+**Statut:** À faire
+**Tâches:**
+- [ ] Créer slides PowerPoint/Markdown
+- [ ] Structure: Problème > Solution > Démo > Résultats
+- [ ] Ajouter screenshots de l'application
+- [ ] Inclure métriques techniques
 
 **Story points:** 5
 
 ---
 
-#### US-026: Demo video
-**Status:** To do
-**Tasks:**
-- [ ] Create demo script
-- [ ] Record dashboard navigation
-- [ ] Show authentication
-- [ ] Show key features (map, predictions, analytics)
-- [ ] Duration: 3-5 minutes
+#### US-026: Vidéo de démo
+**Statut:** À faire
+**Tâches:**
+- [ ] Créer script de démo
+- [ ] Enregistrer navigation tableau de bord
+- [ ] Montrer authentification
+- [ ] Montrer fonctionnalités clés (carte, prédictions, analytics)
+- [ ] Durée: 3-5 minutes
 
 **Story points:** 8
 
 ---
 
-## Global Statistics
+## Statistiques Globales
 
-### Complexity by Epic
+### Complexité par Epic
 
-| Epic | User Stories | Points | Status |
+| Epic | User Stories | Points | Statut |
 |------|--------------|--------|--------|
-| Infrastructure & Data | 3 | 18 | 100% |
-| Dashboard | 2 | 13 | 100% |
-| ML & Predictions | 2 | 21 | 100% |
-| Mobility | 3 | 26 | 100% |
-| Anomaly Detection | 2 | 18 | 100% |
-| Authentication | 2 | 16 | 100% |
+| Infrastructure & Données | 3 | 18 | 100% |
+| Tableau de bord | 2 | 13 | 100% |
+| ML & Prédictions | 2 | 21 | 100% |
+| Mobilité | 3 | 26 | 100% |
+| Détection Anomalies | 2 | 18 | 100% |
+| Authentification | 2 | 16 | 100% |
 | Analytics | 2 | 21 | 100% |
-| Deployment | 3 | 8 | 100% |
+| Déploiement | 3 | 8 | 100% |
 | Documentation | 3 | 8 | 100% |
-| Final deliverables | 4 | 21 | 25% |
+| Livrables finaux | 4 | 21 | 25% |
 
-**Total:** 26 User Stories | 170 Story Points | 85% completed
-
----
-
-## Next Steps (Sprint 3 - Continued)
-
-### HIGH Priority
-1. Create BACKLOG.md - DONE
-2. Import to Notion and share link
-3. Generate demo PDF report
-4. Create PowerPoint presentation
-
-### MEDIUM Priority
-5. Write demo video script
-6. Record demo video
-7. Final documentation review
-
-### LOW Priority
-8. Performance optimizations (if time)
-9. Additional end-to-end tests (if time)
+**Total:** 26 User Stories | 170 Story Points | 85% complété
 
 ---
 
-## Useful Links
+## Prochaines Étapes (Sprint 3 - Suite)
+
+### Priorité HAUTE
+1. Créer BACKLOG.md - FAIT
+2. Importer dans Notion et partager le lien
+3. Générer rapport PDF démo
+4. Créer présentation PowerPoint
+
+### Priorité MOYENNE
+5. Écrire script vidéo de démo
+6. Enregistrer vidéo de démo
+7. Révision finale de la documentation
+
+### Priorité BASSE
+8. Optimisations de performance (si temps disponible)
+9. Tests end-to-end supplémentaires (si temps disponible)
+
+---
+
+## Liens Utiles
 
 - **Frontend:** https://frontend-gamma-three-19.vercel.app
 - **Backend API:** https://smartcity-platform-production.up.railway.app
-- **API Docs:** https://smartcity-platform-production.up.railway.app/docs
+- **Docs API:** https://smartcity-platform-production.up.railway.app/docs
 - **GitHub:** https://github.com/Loudiyii/smartcity-platform
-- **Supabase Dashboard:** https://supabase.com/dashboard
+- **Tableau de bord Supabase:** https://supabase.com/dashboard
 
 ---
 
-## Team & Roles
+## Équipe & Rôles
 
-| Member | Role | Responsibilities |
+| Membre | Rôle | Responsabilités |
 |--------|------|-----------------|
-| TBD | Product Owner | Product vision, backlog, priorities |
-| TBD | Scrum Master | Facilitation, blockers, ceremonies |
-| TBD | Backend Dev | FastAPI, ML, APIs |
-| TBD | Frontend Dev | React, UI/UX |
-| TBD | Data Engineer | Database, ETL, IoT |
+| TBD | Product Owner | Vision produit, backlog, priorités |
+| TBD | Scrum Master | Facilitation, blocages, cérémonies |
+| TBD | Développeur Backend | FastAPI, ML, APIs |
+| TBD | Développeur Frontend | React, UI/UX |
+| TBD | Ingénieur Données | Base de données, ETL, IoT |
 | TBD | QA | Tests, validation |
 
 ---
 
-## Release Notes
+## Notes de Version
 
-**v1.0.0 - MVP Production (December 31, 2024)**
-**Development period:** December 18 - December 31, 2024 (13 days)
+**v1.0.0 - MVP Production (31 décembre 2024)**
+**Période de développement:** 18 décembre - 31 décembre 2024 (13 jours)
 
-- Real-time data collection (AQICN, OpenWeatherMap, IoT)
-- Interactive dashboard with KPIs
-- ML predictions (PM2.5 D+1)
-- Interactive multi-layer map
-- Mobility data (Velib, IDFM traffic)
-- Automatic anomaly detection
-- Hybrid authentication (public/protected)
-- Analytics and PDF reports
-- Deployed in production (Railway + Vercel)
-- Automated tests (Playwright)
-- Complete documentation
+- Collecte de données temps réel (AQICN, OpenWeatherMap, IoT)
+- Tableau de bord interactif avec KPIs
+- Prédictions ML (PM2.5 J+1)
+- Carte interactive multi-couches
+- Données de mobilité (Velib, trafic IDFM)
+- Détection automatique d'anomalies
+- Authentification hybride (public/protégé)
+- Analytics et rapports PDF
+- Déployé en production (Railway + Vercel)
+- Tests automatisés (Playwright)
+- Documentation complète
 
-**Final deliverables:**
-- Functional prototype in production
-- GitHub source code (clean, no AI traces)
-- Structured product backlog (26 user stories, 170 points)
+**Livrables finaux:**
+- Prototype fonctionnel en production
+- Code source GitHub (propre, sans traces AI)
+- Backlog produit structuré (26 user stories, 170 points)
 - Documentation (README, TECHNICAL, BACKLOG)
-- Demo PDF report
-- Final presentation with 8 screenshots
-- Demo video script
+- Rapport PDF démo
+- Présentation finale avec 8 screenshots
+- Script vidéo de démo
 
 ---
 
-**Last updated:** December 31, 2024
+**Dernière mise à jour:** 31 décembre 2024

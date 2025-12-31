@@ -1,103 +1,103 @@
-# Smart City Platform
-## Air Quality and Urban Mobility Monitoring
+# Plateforme Smart City
+## Surveillance de la Qualité de l'Air et de la Mobilité Urbaine
 
-**ESIS-2 Project**
-**Period:** December 18-31, 2024
-**MVP Deployed to Production**
-
----
-
-## Table of Contents
-
-1. Context & Problem
-2. Project Objectives
-3. Technical Architecture
-4. Application Demo
-5. Results & Metrics
-6. Technologies Used
-7. Deliverables
-8. Conclusion & Future Work
+**Projet ESIS-2**
+**Période :** 18-31 décembre 2024
+**MVP Déployé en Production**
 
 ---
 
-# 1. Context & Problem
+## Table des Matières
 
-## Problem Statement
-
-Air pollution is a major public health issue in metropolitan areas:
-
-- 48,000 premature deaths per year in France related to pollution
-- Economic cost estimated at 100 billion euros per year
-- Lack of real-time visibility for citizens and decision-makers
-
-## Identified Need
-
-Environmental managers like Marie Dubois (our main persona) need to:
-
-- Monitor air quality in real-time
-- Predict pollution levels for the next day
-- Analyze correlations with weather and traffic
-- Alert populations when thresholds are exceeded
-- Generate reports for decision-makers
+1. Contexte & Problématique
+2. Objectifs du Projet
+3. Architecture Technique
+4. Démo de l'Application
+5. Résultats & Métriques
+6. Technologies Utilisées
+7. Livrables
+8. Conclusion & Perspectives
 
 ---
 
-# 2. Project Objectives
+# 1. Contexte & Problématique
+
+## Énoncé du Problème
+
+La pollution de l'air est un problème majeur de santé publique dans les zones métropolitaines :
+
+- 48 000 décès prématurés par an en France liés à la pollution
+- Coût économique estimé à 100 milliards d'euros par an
+- Manque de visibilité en temps réel pour les citoyens et les décideurs
+
+## Besoin Identifié
+
+Les gestionnaires environnementaux comme Marie Dubois (notre persona principale) ont besoin de :
+
+- Surveiller la qualité de l'air en temps réel
+- Prédire les niveaux de pollution pour le lendemain
+- Analyser les corrélations avec la météo et le trafic
+- Alerter les populations lorsque les seuils sont dépassés
+- Générer des rapports pour les décideurs
+
+---
+
+# 2. Objectifs du Projet
 
 ## Mission
 
-Develop a real-time monitoring platform for air quality and urban mobility in Paris.
+Développer une plateforme de surveillance en temps réel de la qualité de l'air et de la mobilité urbaine à Paris.
 
-## Main Objectives
+## Objectifs Principaux
 
-1. **Real-time data collection**
-   - External APIs (AQICN, OpenWeatherMap)
-   - Simulated IoT sensors (5 measurement points in Paris)
-   - IDFM mobility data (Velib, traffic, transport)
+1. **Collecte de données en temps réel**
+   - APIs externes (AQICN, OpenWeatherMap)
+   - Capteurs IoT simulés (5 points de mesure à Paris)
+   - Données de mobilité IDFM (Velib, trafic, transport)
 
-2. **Analysis & Prediction**
-   - Machine Learning model (Random Forest) for next-day predictions
-   - Automatic anomaly detection
-   - Pollution-weather correlations
+2. **Analyse & Prédiction**
+   - Modèle Machine Learning (Random Forest) pour prédictions J+1
+   - Détection automatique d'anomalies
+   - Corrélations pollution-météo
 
-3. **Visualization & Accessibility**
-   - Interactive real-time dashboard
-   - Multi-layer maps (Leaflet.js)
-   - Responsive and intuitive interface
+3. **Visualisation & Accessibilité**
+   - Dashboard interactif en temps réel
+   - Cartes multi-couches (Leaflet.js)
+   - Interface responsive et intuitive
 
-4. **Security & Privacy**
-   - Hybrid authentication (public + protected pages)
-   - Supabase Auth with JWT tokens
-   - Row-Level Security (RLS) on database
+4. **Sécurité & Confidentialité**
+   - Authentification hybride (pages publiques + protégées)
+   - Supabase Auth avec tokens JWT
+   - Row-Level Security (RLS) sur base de données
 
 ---
 
-# 3. Technical Architecture
+# 3. Architecture Technique
 
-## Tech Stack
+## Stack Technologique
 
 ### Backend
 - **FastAPI** (Python 3.11+) - REST API
-- **Supabase** (PostgreSQL 17) - Database + Auth
-- **Scikit-learn** - ML prediction model
-- **Railway** - Backend deployment
+- **Supabase** (PostgreSQL 17) - Base de données + Auth
+- **Scikit-learn** - Modèle de prédiction ML
+- **Railway** - Déploiement backend
 
 ### Frontend
-- **React 18** + **TypeScript 5** - User interface
-- **Vite** - Fast build tool
-- **TanStack Query** - Server state management
-- **Chart.js** - Data visualization
-- **Leaflet.js** - Interactive maps
-- **Vercel** - Frontend deployment
+- **React 18** + **TypeScript 5** - Interface utilisateur
+- **Vite** - Outil de build rapide
+- **TanStack Query** - Gestion d'état serveur
+- **Chart.js** - Visualisation de données
+- **Leaflet.js** - Cartes interactives
+- **Vercel** - Déploiement frontend
 
-### Integrations
-- **AQICN API** - Air quality data
-- **OpenWeatherMap API** - Weather data
-- **IDFM APIs** - Mobility (Velib, traffic, transport)
+### Intégrations
+- **AQICN API** - Données de qualité de l'air
+- **OpenWeatherMap API** - Données météo
+- **IDFM APIs** - Mobilité (Velib, trafic, transport)
 
 ---
 
-## System Architecture
+## Architecture Système
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -126,247 +126,247 @@ Develop a real-time monitoring platform for air quality and urban mobility in Pa
 
 ---
 
-# 4. Application Demo
+# 4. Démo de l'Application
 
-## Interface & Features
+## Interface & Fonctionnalités
 
-Here's a complete demonstration of the deployed production application.
+Voici une démonstration complète de l'application déployée en production.
 
 ---
 
-## Main Dashboard (Public)
+## Dashboard Principal (Public)
 
 ![Dashboard](screenshots/01-dashboard-home.png)
 
-### Features:
-- **3 real-time KPIs**: PM2.5, PM10, NO2
-- **Color-coded indicators** according to WHO thresholds (green/orange/red)
-- **IDFM Mobility**:
-  - 13,000+ Velib bikes available
-  - 1000 active stations
-  - Real-time traffic alerts
-- **Automatic anomaly detection** (last 24 hours)
-- **Auto-refresh** every 60 seconds
+### Fonctionnalités :
+- **3 KPIs en temps réel** : PM2.5, PM10, NO2
+- **Indicateurs colorés** selon les seuils de l'OMS (vert/orange/rouge)
+- **Mobilité IDFM** :
+  - 13 000+ vélos Velib disponibles
+  - 1000 stations actives
+  - Alertes trafic en temps réel
+- **Détection automatique d'anomalies** (dernières 24 heures)
+- **Rafraîchissement auto** toutes les 60 secondes
 
-### Displayed data:
-- PM2.5: **64.0 μg/m³** (Bad - Red)
-- PM10: **15.0 μg/m³** (Good - Green)
-- NO2: **20.5 μg/m³** (Good - Green)
-
----
-
-## Interactive Multi-Layer Map (Public)
-
-![Interactive Map](screenshots/02-map-interactive.png)
-
-### Available layers:
-1. **Pollution Heatmap (PM2.5)** - Red zones = high pollution
-2. **IoT Sensors** - 5 real-time measurement points
-3. **Velib Stations** - 1000+ stations with availability
-4. **Transport Stops** - Metro, RER, bus
-5. **Traffic Disruptions** - Active IDFM alerts
-
-### Technologies:
-- **Leaflet.js** for interactivity
-- **Kriging interpolation** for heatmap
-- **Clickable markers** with detailed popups
-- **Layer control** (upper right corner)
+### Données affichées :
+- PM2.5 : **64.0 μg/m³** (Mauvais - Rouge)
+- PM10 : **15.0 μg/m³** (Bon - Vert)
+- NO2 : **20.5 μg/m³** (Bon - Vert)
 
 ---
 
-## ML Predictions (Public)
+## Carte Interactive Multi-Couches (Public)
 
-![Predictions](screenshots/03-predictions.png)
+![Carte Interactive](screenshots/02-map-interactive.png)
 
-### Current status:
-- **404 Error** - Model not yet trained
-- **Button available**: "Train model for Paris"
+### Couches disponibles :
+1. **Heatmap Pollution (PM2.5)** - Zones rouges = pollution élevée
+2. **Capteurs IoT** - 5 points de mesure en temps réel
+3. **Stations Velib** - 1000+ stations avec disponibilité
+4. **Arrêts de Transport** - Métro, RER, bus
+5. **Perturbations Trafic** - Alertes IDFM actives
 
-### Planned features:
-- **PM2.5 prediction for next day** (24h in advance)
-- **Random Forest** trained on 30 days of data
-- **Confidence interval** (min/max range)
-- **Model confidence score**
-- **Predicted AQI level** with recommendations
-- **Target performance**: R² > 0.7, MAPE < 30%
+### Technologies :
+- **Leaflet.js** pour l'interactivité
+- **Interpolation Kriging** pour la heatmap
+- **Marqueurs cliquables** avec popups détaillés
+- **Contrôle des couches** (coin supérieur droit)
 
 ---
 
-## Authentication
+## Prédictions ML (Public)
+
+![Prédictions](screenshots/03-predictions.png)
+
+### État actuel :
+- **Erreur 404** - Modèle pas encore entraîné
+- **Bouton disponible** : "Entraîner le modèle pour Paris"
+
+### Fonctionnalités prévues :
+- **Prédiction PM2.5 pour le lendemain** (24h à l'avance)
+- **Random Forest** entraîné sur 30 jours de données
+- **Intervalle de confiance** (plage min/max)
+- **Score de confiance du modèle**
+- **Niveau AQI prédit** avec recommandations
+- **Performance cible** : R² > 0.7, MAPE < 30%
+
+---
+
+## Authentification
 
 ![Login](screenshots/04-login.png)
 
-### Authentication system:
-- **Email + Password**
-- **Email verification** required
-- **JWT tokens** via Supabase Auth
-- **Forgot password** (reset by email)
-- **Secure session** with token refresh
+### Système d'authentification :
+- **Email + Mot de passe**
+- **Vérification email** requise
+- **Tokens JWT** via Supabase Auth
+- **Mot de passe oublié** (réinitialisation par email)
+- **Session sécurisée** avec rafraîchissement de token
 
-### Hybrid model:
-- **Public pages**: Dashboard, Map, Predictions, Mobility
-- **Protected pages**: Analytics, Mobility Impact, Reports
-- **Auto-redirect** if not authenticated
-
----
-
-## Authenticated Dashboard
-
-![Dashboard Authenticated](screenshots/05-dashboard-authenticated.png)
-
-### Differences after login:
-- **Email displayed** in header (anamrabdo1@gmail.com)
-- **Logout button** (red)
-- **Lock icons removed** from Analytics, Mobility Impact, Reports
-- **Full access** to all features
-
-### Real-time data:
-- **Velib**: 13,008 bikes, 18,658 free spots (40.6%)
-- **Traffic Alerts**: No disruption reported
-- **Anomalies**: None detected (last 24h)
+### Modèle hybride :
+- **Pages publiques** : Dashboard, Carte, Prédictions, Mobilité
+- **Pages protégées** : Analytics, Impact Mobilité, Rapports
+- **Redirection auto** si non authentifié
 
 ---
 
-## Analytics & Correlations (Protected)
+## Dashboard Authentifié
 
-![Analytics Correlation](screenshots/06-analytics-correlation.png)
+![Dashboard Authentifié](screenshots/05-dashboard-authenticated.png)
 
-### Pollution-weather correlation analysis:
-- **Pearson coefficient**: 0.381
-- **Interpretation**: Weak positive correlation
-- **Graph**: PM2.5 vs Temperature over 7 days
-- **27 data points** analyzed
+### Différences après connexion :
+- **Email affiché** dans l'en-tête (anamrabdo1@gmail.com)
+- **Bouton Déconnexion** (rouge)
+- **Icônes cadenas retirées** de Analytics, Impact Mobilité, Rapports
+- **Accès complet** à toutes les fonctionnalités
 
-### Customizable parameters:
-- **City**: Paris, Lyon, Marseille
-- **Period**: 7, 14, or 30 days
-- **Pollutant**: PM2.5, PM10, NO2, O3
-- **Weather variable**: Temperature, Humidity, Wind, Pressure
-
-### Insights:
-- PM2.5 trends: Peaks at 64 μg/m³
-- Temperature: Variations from 0°C to 10°C
-- Weak correlation = pollution independent of temperature
+### Données en temps réel :
+- **Velib** : 13 008 vélos, 18 658 places libres (40.6%)
+- **Alertes Trafic** : Aucune perturbation signalée
+- **Anomalies** : Aucune détectée (dernières 24h)
 
 ---
 
-## PDF Report Generation (Protected)
+## Analytics & Corrélations (Protégé)
 
-![Reports Page](screenshots/07-reports-page.png)
+![Analytics Corrélation](screenshots/06-analytics-correlation.png)
 
-### Report configuration:
-- **City**: Paris (selectable)
-- **Start date**: 24/12/2024
-- **End date**: 31/12/2024
-- **Limit**: Maximum 90 days per report
+### Analyse de corrélation pollution-météo :
+- **Coefficient de Pearson** : 0.381
+- **Interprétation** : Corrélation positive faible
+- **Graphique** : PM2.5 vs Température sur 7 jours
+- **27 points de données** analysés
 
-### Generated content:
-- **Statistics table** (average, min, max for PM2.5, PM10, NO2)
-- **PM2.5 evolution graph** over the period
-- **Weather graphs** (temperature, humidity)
-- **Header** with city and analyzed period
-- **Generation timestamp**
+### Paramètres personnalisables :
+- **Ville** : Paris, Lyon, Marseille
+- **Période** : 7, 14, ou 30 jours
+- **Polluant** : PM2.5, PM10, NO2, O3
+- **Variable météo** : Température, Humidité, Vent, Pression
 
-### Output format:
-- **Downloadable PDF** (via matplotlib backend)
-- **Filename**: `rapport_paris_2024-12-24_to_2024-12-31.pdf`
-
----
-
-## Real-Time Mobility (Public)
-
-![Mobility Page](screenshots/08-mobility-page.png)
-
-### Velib Metropole data:
-- **1000 total stations**
-- **13,038 available bikes**
-- **18,630 free spots**
-- **40.7%** average availability
-
-### Traffic disruptions:
-- **No ongoing disruptions**
-- **Smooth traffic** across the entire network
-
-### Stop map:
-- **Public transport stops**
-- **Real-time next arrivals** (SIRI Lite format)
-- **Click on a stop** to see schedules
-
-### Nearby pollution:
-- **Spatial analysis** in progress (kriging)
-- **Air quality** near stops
+### Insights :
+- Tendances PM2.5 : Pics à 64 μg/m³
+- Température : Variations de 0°C à 10°C
+- Corrélation faible = pollution indépendante de la température
 
 ---
 
-# 5. Results & Metrics
+## Génération de Rapports PDF (Protégé)
 
-## Project Statistics
+![Page Rapports](screenshots/07-reports-page.png)
 
-### Data volume:
-- **2000+ air quality measurements** collected
-- **577 IDFM traffic disruptions** parsed
-- **1000+ Velib stations** monitored in real-time
-- **5 IoT sensors** generating data every 15 minutes
+### Configuration du rapport :
+- **Ville** : Paris (sélectionnable)
+- **Date de début** : 24/12/2024
+- **Date de fin** : 31/12/2024
+- **Limite** : Maximum 90 jours par rapport
 
-### Technical performance:
-- **API Response Time**: < 200ms (95th percentile)
-- **Dashboard Load Time**: < 2 seconds
-- **Database Queries**: < 50ms average
-- **Uptime**: 99.9% (Railway + Vercel)
+### Contenu généré :
+- **Tableau de statistiques** (moyenne, min, max pour PM2.5, PM10, NO2)
+- **Graphique d'évolution PM2.5** sur la période
+- **Graphiques météo** (température, humidité)
+- **En-tête** avec ville et période analysée
+- **Horodatage de génération**
 
-### Functional coverage:
-- **26 User Stories** implemented
-- **170 complexity points** handled
-- **10 Epics** completed
-- **85%** of backlog finished
+### Format de sortie :
+- **PDF téléchargeable** (via backend matplotlib)
+- **Nom de fichier** : `rapport_paris_2024-12-24_to_2024-12-31.pdf`
 
 ---
 
-## Delivered Features
+## Mobilité en Temps Réel (Public)
+
+![Page Mobilité](screenshots/08-mobility-page.png)
+
+### Données Velib Métropole :
+- **1000 stations totales**
+- **13 038 vélos disponibles**
+- **18 630 places libres**
+- **40.7%** de disponibilité moyenne
+
+### Perturbations trafic :
+- **Aucune perturbation en cours**
+- **Trafic fluide** sur l'ensemble du réseau
+
+### Carte des arrêts :
+- **Arrêts de transport en commun**
+- **Prochains passages en temps réel** (format SIRI Lite)
+- **Cliquer sur un arrêt** pour voir les horaires
+
+### Pollution à proximité :
+- **Analyse spatiale** en cours (kriging)
+- **Qualité de l'air** près des arrêts
+
+---
+
+# 5. Résultats & Métriques
+
+## Statistiques du Projet
+
+### Volume de données :
+- **2000+ mesures de qualité de l'air** collectées
+- **577 perturbations trafic IDFM** parsées
+- **1000+ stations Velib** surveillées en temps réel
+- **5 capteurs IoT** générant des données toutes les 15 minutes
+
+### Performance technique :
+- **Temps de réponse API** : < 200ms (95e percentile)
+- **Temps de chargement Dashboard** : < 2 secondes
+- **Requêtes base de données** : < 50ms en moyenne
+- **Uptime** : 99.9% (Railway + Vercel)
+
+### Couverture fonctionnelle :
+- **26 User Stories** implémentées
+- **170 points de complexité** gérés
+- **10 Epics** complétés
+- **85%** du backlog terminé
+
+---
+
+## Fonctionnalités Livrées
 
 ### Phase 1 - MVP
-- [x] Real-time data collection (AQICN, OpenWeatherMap, IoT)
-- [x] Dashboard with KPIs
-- [x] Historical graphs
-- [x] Supabase database
+- [x] Collecte de données en temps réel (AQICN, OpenWeatherMap, IoT)
+- [x] Dashboard avec KPIs
+- [x] Graphiques historiques
+- [x] Base de données Supabase
 
-### Phase 2 - Advanced Features
-- [x] Interactive multi-layer map
-- [x] Mobility data (Velib, traffic, transport)
-- [x] Automatic anomaly detection (30min intervals)
-- [x] Hybrid authentication (public/protected)
-- [x] Pollution-weather correlation analysis
-- [x] PDF report generation
+### Phase 2 - Fonctionnalités Avancées
+- [x] Carte interactive multi-couches
+- [x] Données de mobilité (Velib, trafic, transport)
+- [x] Détection automatique d'anomalies (intervalles 30min)
+- [x] Authentification hybride (public/protégé)
+- [x] Analyse de corrélation pollution-météo
+- [x] Génération de rapports PDF
 
 ### Phase 3 - Production
-- [x] Backend deployment (Railway)
-- [x] Frontend deployment (Vercel)
-- [x] Production Supabase configuration
-- [x] Complete documentation
-- [x] Automated tests (Playwright)
+- [x] Déploiement backend (Railway)
+- [x] Déploiement frontend (Vercel)
+- [x] Configuration Supabase production
+- [x] Documentation complète
+- [x] Tests automatisés (Playwright)
 
 ---
 
-## Objectives Achieved
+## Objectifs Atteints
 
-| Objective | Target | Result | Status |
-|----------|--------|----------|--------|
-| Hourly data collection | Yes | 2000+ measurements | Done |
-| Interactive dashboard | Yes | 3 KPIs + graphs | Done |
-| Multi-layer map | 3+ layers | 5 active layers | Done |
-| Authentication | JWT + RLS | Supabase Auth | Done |
-| Anomaly detection | Auto | 30min worker | Done |
-| IDFM mobility | 577 alerts | Real-time parsed | Done |
-| PDF reports | Yes | Matplotlib | Done |
-| Load time | < 2s | 1.5s avg | Done |
-| API response | < 200ms | 150ms p95 | Done |
-| Deployment | Production | Railway + Vercel | Done |
+| Objectif | Cible | Résultat | Statut |
+|----------|-------|----------|--------|
+| Collecte horaire de données | Oui | 2000+ mesures | Fait |
+| Dashboard interactif | Oui | 3 KPIs + graphiques | Fait |
+| Carte multi-couches | 3+ couches | 5 couches actives | Fait |
+| Authentification | JWT + RLS | Supabase Auth | Fait |
+| Détection d'anomalies | Auto | Worker 30min | Fait |
+| Mobilité IDFM | 577 alertes | Parsées en temps réel | Fait |
+| Rapports PDF | Oui | Matplotlib | Fait |
+| Temps de chargement | < 2s | 1.5s moy | Fait |
+| Réponse API | < 200ms | 150ms p95 | Fait |
+| Déploiement | Production | Railway + Vercel | Fait |
 
 ---
 
-# 6. Technologies Used
+# 6. Technologies Utilisées
 
-## Complete Stack
+## Stack Complète
 
 ### Backend
 ```
@@ -374,113 +374,113 @@ Here's a complete demonstration of the deployed production application.
 - FastAPI (REST API)
 - Supabase (PostgreSQL 17 + Auth)
 - Scikit-learn (Random Forest)
-- Pandas + NumPy (Data processing)
-- Matplotlib (PDF charts)
-- Uvicorn (ASGI server)
+- Pandas + NumPy (Traitement de données)
+- Matplotlib (Graphiques PDF)
+- Uvicorn (serveur ASGI)
 ```
 
 ### Frontend
 ```
 - React 18
 - TypeScript 5
-- Vite (Build tool)
-- TanStack Query (Server state)
-- Zustand (Global state)
+- Vite (Outil de build)
+- TanStack Query (État serveur)
+- Zustand (État global)
 - Tailwind CSS (Styling)
-- Chart.js (Visualizations)
-- Leaflet.js (Maps)
+- Chart.js (Visualisations)
+- Leaflet.js (Cartes)
 ```
 
 ### Infrastructure
 ```
-- Railway (Backend hosting)
-- Vercel (Frontend hosting)
-- Supabase Cloud (Database + Auth)
-- GitHub (Version control)
+- Railway (Hébergement backend)
+- Vercel (Hébergement frontend)
+- Supabase Cloud (Base de données + Auth)
+- GitHub (Contrôle de version)
 ```
 
-### External APIs
+### APIs Externes
 ```
-- AQICN (Air quality data)
-- OpenWeatherMap (Weather data)
-- IDFM PRIM (Velib, traffic, transit)
+- AQICN (Données qualité de l'air)
+- OpenWeatherMap (Données météo)
+- IDFM PRIM (Velib, trafic, transit)
 ```
 
 ---
 
-## Security & Compliance
+## Sécurité & Conformité
 
-### Security measures:
-- **JWT tokens** (HS256) with 60 min expiration
-- **Row-Level Security (RLS)** on all tables
-- **Email verification** required
-- **HTTPS** on all endpoints
-- **Input validation** with Pydantic
-- **SQL injection prevention**
-- **XSS protection** via React escaping
-- **CORS** configured for authorized domains
+### Mesures de sécurité :
+- **Tokens JWT** (HS256) avec expiration de 60 min
+- **Row-Level Security (RLS)** sur toutes les tables
+- **Vérification email** requise
+- **HTTPS** sur tous les endpoints
+- **Validation des entrées** avec Pydantic
+- **Prévention injection SQL**
+- **Protection XSS** via échappement React
+- **CORS** configuré pour domaines autorisés
 
-### GDPR compliance:
-- **No personal data** stored (except auth)
-- **Data anonymization**
-- **Right to deletion** (via Supabase)
-- **Data minimization** principle
+### Conformité RGPD :
+- **Aucune donnée personnelle** stockée (sauf auth)
+- **Anonymisation des données**
+- **Droit à l'effacement** (via Supabase)
+- **Principe de minimisation des données**
 
 ---
 
-# 7. Deliverables
+# 7. Livrables
 
-## Final Deliverables
+## Livrables Finaux
 
-### 1. Functional Prototype (MVP)
-- **Frontend**: https://frontend-gamma-three-19.vercel.app
-- **Backend**: https://smartcity-platform-production.up.railway.app
-- **API Docs**: https://smartcity-platform-production.up.railway.app/docs
+### 1. Prototype Fonctionnel (MVP)
+- **Frontend** : https://frontend-gamma-three-19.vercel.app
+- **Backend** : https://smartcity-platform-production.up.railway.app
+- **API Docs** : https://smartcity-platform-production.up.railway.app/docs
 
-### 2. Source Code (GitHub)
-- **Repository**: https://github.com/Loudiyii/smartcity-platform
-- **Clean code** (no AI traces)
-- **Complete documentation**
-- **Git history** with atomic commits
+### 2. Code Source (GitHub)
+- **Repository** : https://github.com/Loudiyii/smartcity-platform
+- **Code propre** (pas de traces d'IA)
+- **Documentation complète**
+- **Historique Git** avec commits atomiques
 
 ### 3. Documentation
-- **README.md** (33 KB) - Installation, usage, deployment
-- **TECHNICAL.md** (41 KB) - Detailed technical architecture
-- **QUICK_START.md** - Quick start guide
-- **BACKLOG.md** - Structured product backlog (26 user stories)
+- **README.md** (33 KB) - Installation, utilisation, déploiement
+- **TECHNICAL.md** (41 KB) - Architecture technique détaillée
+- **QUICK_START.md** - Guide de démarrage rapide
+- **BACKLOG.md** - Backlog produit structuré (26 user stories)
 
-### 4. Product Backlog
-- **File**: `BACKLOG.md` (ready for Notion import)
-- **26 User Stories** across 10 Epics
-- **170 complexity points**
-- **Detailed status**: Done, In Progress, To Do
+### 4. Backlog Produit
+- **Fichier** : `BACKLOG.md` (prêt pour import Notion)
+- **26 User Stories** réparties sur 10 Epics
+- **170 points de complexité**
+- **Statut détaillé** : Fait, En cours, À faire
 
-### 5. Dashboard & PDF Report
-- **Demo report**: `presentation/rapport-demo.pdf`
-- **Period**: December 24-31, 2024
-- **Content**: Statistics + PM2.5 and weather graphs
+### 5. Dashboard & Rapport PDF
+- **Rapport démo** : `presentation/rapport-demo.pdf`
+- **Période** : 24-31 décembre 2024
+- **Contenu** : Statistiques + graphiques PM2.5 et météo
 
-### 6. Final Presentation
-- **File**: `presentation/PRESENTATION.md`
-- **8 application screenshots**
-- **Structure**: Context → Architecture → Demo → Results
-- **Ready for conversion** to PowerPoint/PDF
+### 6. Présentation Finale
+- **Fichier** : `presentation/PRESENTATION.md`
+- **8 captures d'écran** de l'application
+- **Structure** : Contexte → Architecture → Démo → Résultats
+- **Prêt pour conversion** en PowerPoint/PDF
 
-### 7. Demo Video Guide
-- **Script**: Included in this presentation
-- **Suggested duration**: 3-5 minutes
-- **Steps**: Login → Dashboard → Map → Analytics → Reports
+### 7. Guide Vidéo Démo
+- **Script** : Inclus dans cette présentation
+- **Durée suggérée** : 3-5 minutes
+- **Étapes** : Connexion → Dashboard → Carte → Analytics → Rapports
 
 ---
 
-## File Structure
+## Structure des Fichiers
 
 ```
 smartcity/
 ├── presentation/
-│   ├── PRESENTATION.md         # This file
-│   ├── rapport-demo.pdf        # Generated PDF report
-│   └── screenshots/            # 8 application screenshots
+│   ├── PRESENTATION.md         # Ce fichier
+│   ├── rapport-demo.pdf        # Rapport PDF généré
+│   └── screenshots/            # 8 captures d'écran de l'application
 │       ├── 01-dashboard-home.png
 │       ├── 02-map-interactive.png
 │       ├── 03-predictions.png
@@ -490,12 +490,12 @@ smartcity/
 │       ├── 07-reports-page.png
 │       └── 08-mobility-page.png
 │
-├── BACKLOG.md                  # Product backlog (Notion-ready)
-├── README.md                   # Main documentation
-├── TECHNICAL.md                # Technical architecture
-├── QUICK_START.md              # Quick start guide
+├── BACKLOG.md                  # Backlog produit (prêt pour Notion)
+├── README.md                   # Documentation principale
+├── TECHNICAL.md                # Architecture technique
+├── QUICK_START.md              # Guide de démarrage rapide
 │
-├── backend/                    # FastAPI API
+├── backend/                    # API FastAPI
 │   ├── app/
 │   │   ├── api/v1/
 │   │   ├── ml/
@@ -503,7 +503,7 @@ smartcity/
 │   │   └── simulators/
 │   └── requirements.txt
 │
-└── frontend/                   # React application
+└── frontend/                   # Application React
     ├── src/
     │   ├── pages/
     │   ├── components/
@@ -513,194 +513,194 @@ smartcity/
 
 ---
 
-# 8. Conclusion & Future Work
+# 8. Conclusion & Perspectives
 
-## Project Summary
+## Résumé du Projet
 
-### Successes
-- **Deadline met**: December 18-31, 2024 (13 days)
-- **Functional MVP** deployed to production
-- **85% of backlog** completed
-- **Excellent performance** (< 2s load time)
-- **Complete tests** (authentication, pages, API)
+### Succès
+- **Deadline respecté** : 18-31 décembre 2024 (13 jours)
+- **MVP fonctionnel** déployé en production
+- **85% du backlog** complété
+- **Excellente performance** (< 2s temps de chargement)
+- **Tests complets** (authentification, pages, API)
 
-### Learning outcomes
-- **Modern architecture** (FastAPI + React + Supabase)
-- **Multiple API integrations** (AQICN, OpenWeatherMap, IDFM)
-- **Production-ready Machine Learning**
-- **Continuous deployment** (Railway + Vercel)
-- **Security** (JWT, RLS, email verification)
-
----
-
-## Future Development
-
-### Short term (Sprint 3)
-- **Train ML model** for Paris (404 fix)
-- **Performance optimizations** (caching, lazy loading)
-- **Additional end-to-end tests**
-- **Monitoring** (Sentry, centralized logs)
-
-### Medium term
-- **Multi-city support** (Lyon, Marseille, Toulouse)
-- **Push notifications** for real-time alerts
-- **Mobile application** (React Native)
-- **J+3 predictions** (LSTM/GRU models)
-
-### Long term
-- **Generative AI** for personalized recommendations
-- **Real IoT sensors** (partnerships with local authorities)
-- **Public API** for third-party developers
-- **European expansion** (Berlin, Madrid, Rome)
+### Apprentissages
+- **Architecture moderne** (FastAPI + React + Supabase)
+- **Intégrations multi-APIs** (AQICN, OpenWeatherMap, IDFM)
+- **Machine Learning** prêt pour la production
+- **Déploiement continu** (Railway + Vercel)
+- **Sécurité** (JWT, RLS, vérification email)
 
 ---
 
-## Value Proposition
+## Développement Futur
 
-### For citizens
-- **Accessible information** 24/7 on air quality
-- **Next-day predictions** to plan outdoor activities
-- **Interactive maps** to avoid polluted areas
-- **Integrated mobility data** (Velib, transport)
+### Court terme (Sprint 3)
+- **Entraîner le modèle ML** pour Paris (correction 404)
+- **Optimisations de performance** (caching, lazy loading)
+- **Tests end-to-end** supplémentaires
+- **Monitoring** (Sentry, logs centralisés)
 
-### For managers
-- **Real-time monitoring** across multiple points
-- **Automatic anomaly detection**
-- **Pollution-weather-traffic correlation analysis**
-- **PDF reports** for decision-makers
-- **Configurable alerts** (threshold exceeded)
+### Moyen terme
+- **Support multi-villes** (Lyon, Marseille, Toulouse)
+- **Notifications push** pour alertes en temps réel
+- **Application mobile** (React Native)
+- **Prédictions J+3** (modèles LSTM/GRU)
 
-### For research
-- **Open data** (REST API)
-- **Reusable ML models**
-- **Documented ETL pipeline**
-- **Scalable architecture**
+### Long terme
+- **IA générative** pour recommandations personnalisées
+- **Capteurs IoT réels** (partenariats avec collectivités)
+- **API publique** pour développeurs tiers
+- **Expansion européenne** (Berlin, Madrid, Rome)
 
 ---
 
-## Acknowledgments
+## Proposition de Valeur
 
-- **Supabase** for the free Auth + DB platform
-- **Railway** and **Vercel** for hosting
-- **AQICN** for air quality data
-- **IDFM** for Île-de-France mobility APIs
-- **ESIS-2 Team** for collaboration
+### Pour les citoyens
+- **Information accessible** 24/7 sur la qualité de l'air
+- **Prédictions lendemain** pour planifier activités extérieures
+- **Cartes interactives** pour éviter les zones polluées
+- **Données de mobilité** intégrées (Velib, transport)
+
+### Pour les gestionnaires
+- **Surveillance en temps réel** sur plusieurs points
+- **Détection automatique d'anomalies**
+- **Analyse de corrélation** pollution-météo-trafic
+- **Rapports PDF** pour décideurs
+- **Alertes configurables** (dépassement de seuils)
+
+### Pour la recherche
+- **Données ouvertes** (REST API)
+- **Modèles ML réutilisables**
+- **Pipeline ETL** documenté
+- **Architecture scalable**
+
+---
+
+## Remerciements
+
+- **Supabase** pour la plateforme Auth + DB gratuite
+- **Railway** et **Vercel** pour l'hébergement
+- **AQICN** pour les données de qualité de l'air
+- **IDFM** pour les APIs de mobilité d'Île-de-France
+- **Équipe ESIS-2** pour la collaboration
 
 ---
 
 # Questions & Contact
 
-## Information
+## Informations
 
-**GitHub Repository:**
+**Repository GitHub :**
 https://github.com/Loudiyii/smartcity-platform
 
-**Online Application:**
+**Application en Ligne :**
 https://frontend-gamma-three-19.vercel.app
 
-**API Documentation:**
+**Documentation API :**
 https://smartcity-platform-production.up.railway.app/docs
 
-**Test Account:**
-- Email: anamrabdo1@gmail.com
-- Password: SmartCity2025!
+**Compte de Test :**
+- Email : anamrabdo1@gmail.com
+- Mot de passe : SmartCity2025!
 
 ---
 
-# Thank You!
+# Merci !
 
-**Questions?**
+**Questions ?**
 
 ---
 
-# Appendix: Demo Video Script
+# Annexe : Script Vidéo Démo
 
-## Demo Script (3-5 min)
+## Script de Démo (3-5 min)
 
 ### Introduction (30 sec)
 ```
-"Hello, we're presenting Smart City Platform, an air quality and urban mobility
-monitoring platform we developed in 13 days.
+"Bonjour, nous présentons Smart City Platform, une plateforme de surveillance de la
+qualité de l'air et de la mobilité urbaine que nous avons développée en 13 jours.
 
-Our goal: provide real-time data and predictions to citizens and environmental
-managers."
+Notre objectif : fournir des données en temps réel et des prédictions aux citoyens et
+gestionnaires environnementaux."
 ```
 
-### Public Dashboard (45 sec)
+### Dashboard Public (45 sec)
 ```
-"On the main dashboard, accessible without login, we have:
-- 3 real-time KPIs: PM2.5 at 64 μg/m³ (bad), PM10 and NO2 (good)
-- Mobility data: 13,000 Velib bikes available across 1000 stations
-- Anomaly detection: none in the last 24 hours
-- Automatic refresh every 60 seconds"
-```
-
-### Interactive Map (45 sec)
-```
-"The interactive map combines 5 data layers:
-- PM2.5 pollution heatmap (red zones = high pollution)
-- 5 IoT sensors with real-time measurements
-- 1000 Velib stations with availability
-- Transport stops (metro, RER, bus)
-- IDFM traffic disruptions
-
-You can toggle layers on/off and click markers for details."
+"Sur le dashboard principal, accessible sans connexion, nous avons :
+- 3 KPIs en temps réel : PM2.5 à 64 μg/m³ (mauvais), PM10 et NO2 (bons)
+- Données de mobilité : 13 000 vélos Velib disponibles sur 1000 stations
+- Détection d'anomalies : aucune dans les dernières 24 heures
+- Rafraîchissement automatique toutes les 60 secondes"
 ```
 
-### Authentication (30 sec)
+### Carte Interactive (45 sec)
 ```
-"The authentication system is hybrid:
-- Public pages: dashboard, map, predictions, mobility
-- Protected pages: analytics, reports, mobility impact
+"La carte interactive combine 5 couches de données :
+- Heatmap de pollution PM2.5 (zones rouges = pollution élevée)
+- 5 capteurs IoT avec mesures en temps réel
+- 1000 stations Velib avec disponibilité
+- Arrêts de transport (métro, RER, bus)
+- Perturbations trafic IDFM
 
-I'm logging in to access advanced features."
+Vous pouvez activer/désactiver les couches et cliquer sur les marqueurs pour les détails."
+```
+
+### Authentification (30 sec)
+```
+"Le système d'authentification est hybride :
+- Pages publiques : dashboard, carte, prédictions, mobilité
+- Pages protégées : analytics, rapports, impact mobilité
+
+Je me connecte pour accéder aux fonctionnalités avancées."
 ```
 
 ### Analytics (30 sec)
 ```
-"In the Analytics section, reserved for authenticated users:
-- Pollution-weather correlation coefficient (Pearson = 0.381)
-- PM2.5 vs Temperature graph over 7 days
-- 27 data points analyzed
-- Weak positive correlation detected"
+"Dans la section Analytics, réservée aux utilisateurs authentifiés :
+- Coefficient de corrélation pollution-météo (Pearson = 0.381)
+- Graphique PM2.5 vs Température sur 7 jours
+- 27 points de données analysés
+- Corrélation positive faible détectée"
 ```
 
-### PDF Reports (30 sec)
+### Rapports PDF (30 sec)
 ```
-"Custom PDF report generation:
-- Select period (here December 24-31)
-- Complete statistics (average, min, max)
-- PM2.5 and weather evolution graphs
-- Instant PDF download"
+"Génération de rapports PDF personnalisés :
+- Sélection de période (ici 24-31 décembre)
+- Statistiques complètes (moyenne, min, max)
+- Graphiques d'évolution PM2.5 et météo
+- Téléchargement PDF instantané"
 ```
 
 ### Conclusion (30 sec)
 ```
-"In summary, Smart City Platform offers:
-- Real-time multi-source monitoring
-- ML predictions (currently training)
-- Interactive multi-layer maps
-- Advanced analytics for decision-makers
-- Scalable and secure architecture
+"En résumé, Smart City Platform offre :
+- Surveillance multi-sources en temps réel
+- Prédictions ML (en cours d'entraînement)
+- Cartes interactives multi-couches
+- Analytics avancées pour décideurs
+- Architecture scalable et sécurisée
 
-The code is available on GitHub, and the application is deployed to production.
-Thank you!"
+Le code est disponible sur GitHub, et l'application est déployée en production.
+Merci !"
 ```
 
 ---
 
-**Total: ~4 minutes**
+**Total : ~4 minutes**
 
-### Recording tips:
-- **Speak clearly** and not too fast
-- **Show the screen** during navigation
-- **Zoom in** on important elements
-- **Pause** between sections
-- **Record in 1080p** minimum
-- **Use quality microphone**
+### Conseils d'enregistrement :
+- **Parler clairement** et pas trop vite
+- **Montrer l'écran** pendant la navigation
+- **Zoomer** sur les éléments importants
+- **Faire des pauses** entre les sections
+- **Enregistrer en 1080p** minimum
+- **Utiliser un micro de qualité**
 
-### Recommended tools:
-- **OBS Studio** (free, open-source)
+### Outils recommandés :
+- **OBS Studio** (gratuit, open-source)
 - **Loom** (simple, cloud)
-- **Screen.Studio** (automatic editing)
-- **Camtasia** (professional)
+- **Screen.Studio** (montage automatique)
+- **Camtasia** (professionnel)
