@@ -522,8 +522,8 @@ Application en ligne :
 - Health : https://smartcity-platform-production.up.railway.app/health
 
 Connexion démo :
-- Email : demo@smartcity.com
-- Mot de passe : Demo2024!
+- Email : anamrabdo1@smartcity.com
+- Mot de passe : SmartCity2025!
 
 ---
 
