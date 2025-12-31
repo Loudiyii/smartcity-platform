@@ -33,8 +33,17 @@ env/
 .env.local
 .env.*.local
 
-# Claude Code MCP Configuration (contains sensitive tokens)
-.claude/mcp.json
+# Claude Code and AI-related files
+.claude/
+*.claude
+.anthropic/
+
+# Deployment and temporary files
+DEPLOYMENT*.md
+RAILWAY_VARS.txt
+test_endpoints.sh
+.railway/
+.mcp.json
 
 # IDE
 .vscode/
