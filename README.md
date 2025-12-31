@@ -680,9 +680,9 @@ MIT License
 - Île-de-France Mobilités (IDFM) - APIs de mobilité
 - Supabase - base de données et auth
 - Communautés FastAPI et React
-- Équipe ESIS-2
+- Équipe ESIC
 
 ---
 
-**Construit :** 18-31 décembre 2024
+**Construit :** 18-31 décembre 2025
 **Version :** 1.0.0
