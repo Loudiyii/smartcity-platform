@@ -2,7 +2,7 @@
 ## Surveillance de la Qualité de l'Air et de la Mobilité Urbaine
 
 **Projet ESIS-2**
-**Période :** 18-31 décembre 2024
+**Période :** 18-31 décembre 2025
 **MVP Déployé en Production**
 
 ---
@@ -256,8 +256,8 @@ Voici une démonstration complète de l'application déployée en production.
 
 ### Configuration du rapport :
 - **Ville** : Paris (sélectionnable)
-- **Date de début** : 24/12/2024
-- **Date de fin** : 31/12/2024
+- **Date de début** : 24/12/2025
+- **Date de fin** : 31/12/2025
 - **Limite** : Maximum 90 jours par rapport
 
 ### Contenu généré :
@@ -269,7 +269,7 @@ Voici une démonstration complète de l'application déployée en production.
 
 ### Format de sortie :
 - **PDF téléchargeable** (via backend matplotlib)
-- **Nom de fichier** : `rapport_paris_2024-12-24_to_2024-12-31.pdf`
+- **Nom de fichier** : `rapport_paris_2025-12-24_to_2025-12-31.pdf`
 
 ---
 
@@ -457,7 +457,7 @@ Voici une démonstration complète de l'application déployée en production.
 
 ### 5. Dashboard & Rapport PDF
 - **Rapport démo** : `presentation/rapport-demo.pdf`
-- **Période** : 24-31 décembre 2024
+- **Période** : 24-31 décembre 2025
 - **Contenu** : Statistiques + graphiques PM2.5 et météo
 
 ### 6. Présentation Finale
@@ -518,7 +518,7 @@ smartcity/
 ## Résumé du Projet
 
 ### Succès
-- **Deadline respecté** : 18-31 décembre 2024 (13 jours)
+- **Deadline respecté** : 18-31 décembre 2025 (13 jours)
 - **MVP fonctionnel** déployé en production
 - **85% du backlog** complété
 - **Excellente performance** (< 2s temps de chargement)
